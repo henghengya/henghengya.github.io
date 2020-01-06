@@ -1991,9 +1991,6 @@ h1.title {
 .article .sidebar .box .subbox dl dd:hover {
   color: #100e17;
 }
-.article .sidebar .box .subbox dl dd:nth-last-of-type(2) {
-  padding-top: 2px;
-}
 .article .sidebar .box .subbox p {
   width: 100%;
   padding-top: 1rem;
