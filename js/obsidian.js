@@ -1172,6 +1172,7 @@ $(function () {
         var gitalk = new Gitalk({
           clientID: comment.data('ci'),
           clientSecret: comment.data('cs'),
+          accessToken: comment.data('at'),
           repo: comment.data('r'),
           owner: comment.data('o'),
           admin: [comment.data('a')],

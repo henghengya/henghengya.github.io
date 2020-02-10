@@ -4,26 +4,58 @@
   
     
     <entry>
-      <title>创建一个Hexo博客</title>
-      <link href="/2020/01/08/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AAHexo%E5%8D%9A%E5%AE%A2/"/>
-      <url>/2020/01/08/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AAHexo%E5%8D%9A%E5%AE%A2/</url>
+      <title>线程入门（尽量详细）</title>
+      <link href="/2020/02/10/%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%88%E5%B0%BD%E9%87%8F%E8%AF%A6%E7%BB%86%EF%BC%89/"/>
+      <url>/2020/02/10/%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%88%E5%B0%BD%E9%87%8F%E8%AF%A6%E7%BB%86%EF%BC%89/</url>
       
-        <content type="html"><![CDATA[<h2 id="如何创建一个Hexo博客"><a href="#如何创建一个Hexo博客" class="headerlink" title="如何创建一个Hexo博客"></a>如何创建一个Hexo博客</h2><p>这个问题其实没有太大价值，因为网络上已经有很多关于此的文章，官网里的文档也写的非常清晰，本着不重复发明轮子的原则，在此不再赘述。</p><h2 id="使用自定义主题"><a href="#使用自定义主题" class="headerlink" title="使用自定义主题"></a>使用自定义主题</h2><p>我使用的是<a href="https://github.com/TriDiamond/hexo-theme-obsidian" target="_blank" rel="noopener">Obsidian</a>主题，至少在我现在看来主题还是挺好看的，配色、样式挺有科技感。移动端适配的也不错，并且作者看起来也还在更新。问题就是Bug挺多，我修改了一些问题，并且将它放在了我的<a href="https://github.com/lan-mao/hexo-theme-obsidian" target="_blank" rel="noopener">Github仓库</a>中，并且在作者更新了版本后尽量也更新。</p><h2 id="加速你的博客"><a href="#加速你的博客" class="headerlink" title="加速你的博客"></a>加速你的博客</h2><h3 id="加速不经常改动的资源"><a href="#加速不经常改动的资源" class="headerlink" title="加速不经常改动的资源"></a>加速不经常改动的资源</h3><p>如何加速，为了解决这个问题，我尝试了很多的解决方案，比如将博客放到到Coding上，但是发现Coding的IP在香港，在我这里访问更慢；另一个设置CDN加速，我尝试了七牛云和腾讯云两个平台，但不知道因为什么，并没有改善很多。</p><p>后来我发现如果部署到码云平台，它的page页面访问速度很快，但是码云的普通用户不能自定义域名，而且不会自动部署，上传之后必须手动部署才行。但另一方面，Github Pages可以自定义域名，并且还是很多个，支持自动部署。并且我发现，码云仓库的资源是可以直接访问的，而一些静态资源也不需要频繁更改，可以使用手工代替。更重要的是：放在码云上的文件不需要花钱。</p><p><img src="https://blog-source-1258302212.cos.ap-beijing.myqcloud.com/20200121105239_5d40b446b228b3950995bb6660d4f9c6.gif" alt=""></p><h3 id="把图片放在云上"><a href="#把图片放在云上" class="headerlink" title="把图片放在云上"></a>把图片放在云上</h3><p>图片就不能放在码云了，否则每次新写文章的时候就要手动部署一次，麻烦得很。不过使用VSCode的插件功能就可以自动上传图片到云端的资源库中。并且可以自动生成链接。用过Typora来写MD文章，虽然他的实时渲染功能十分炫酷，但是Windows平台不能用插件，使得我还是选择了VSCode。</p><p>腾讯云图片自动上传插件：<a href="https://marketplace.visualstudio.com/items?itemName=galenye.tencent-cloud-cos-upload-image" target="_blank" rel="noopener">tencent-cloud-cos-upload-image - Visual Studio Marketplace</a>，可以使用快捷键上传剪贴板上的图片和本地文件。</p><p>阿里云图床的插件：<a href="https://marketplace.visualstudio.com/items?itemName=vvkee.aliyun-oss-upload-image" target="_blank" rel="noopener">aliyun oss upload image - Visual Studio Marketplace</a></p><p>七牛云图床的自动上传插件：<a href="https://marketplace.visualstudio.com/items?itemName=imys.qiniu-upload-image" target="_blank" rel="noopener">qiniu-upload-image - Visual Studio Marketplace</a></p><blockquote><p>附一个插件：自动生成剪贴板中的链接插件：<a href="https://marketplace.visualstudio.com/items?itemName=kukushi.pasteurl" target="_blank" rel="noopener">Paste URL - Visual Studio Marketplace</a></p></blockquote>]]></content>
+        <content type="html"><![CDATA[<h1 id="尽量的"><a href="#尽量的" class="headerlink" title="尽量的"></a>尽量的</h1>]]></content>
       
       
+      <categories>
+          
+          <category> 1/0世界 </category>
+          
+          <category> JAVA </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> JAVA </tag>
+            
+            <tag> 多线程 </tag>
+            
+        </tags>
       
     </entry>
     
     
     
     <entry>
-      <title>Hello World</title>
-      <link href="/2020/01/07/hello-world/"/>
-      <url>/2020/01/07/hello-world/</url>
+      <title>创建一个Hexo博客</title>
+      <link href="/2020/01/08/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AAHexo%E5%8D%9A%E5%AE%A2/"/>
+      <url>/2020/01/08/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AAHexo%E5%8D%9A%E5%AE%A2/</url>
       
-        <content type="html"><![CDATA[<h1 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h1><p>2020年伊始，我重新开始写博客的计划。因为以前写过的文章十分杂乱，不成体系，所以把以前的博客全部删掉，重新用Hexo + Github Pages + Gitalk重新构建一个静态页面的博客。</p><h2 id="新的博客写些什么"><a href="#新的博客写些什么" class="headerlink" title="新的博客写些什么"></a>新的博客写些什么</h2><p>新博客写些什么是个问题。我思虑良久，并且参考其他人的文章，暂时决定了几个系列：【计算机大世界】、【面试心经】、【源码探究】、【博学参省】</p><h3 id="计算机大世界"><a href="#计算机大世界" class="headerlink" title="计算机大世界"></a>计算机大世界</h3><p>首先，身为一个程序猿，技术类的文章肯定是必须要写的。我给这个系列的博客起名为：计算机大世界。😂好像很俗气的名字，不过这个名字也包含了我对自己的一些期望：希望我的技术树越来越高大，越来越宽广。希望我能保持学习的状态，将自己的知识面变得越来越广。当然，也需要在某些领域深耕下去，成为砖家（逃~）。</p><p>“计算机大世界”这个名字很大，因为所有有关计算机的文章都可以放进去。不过我在这个文章中全部都放有关技术的干货，很干很干的那种。对于其中较为细致的分类，比如其中涉及到的技术Redis、Java、Mysql等等，用标签的形式增加。对于技术文章中成一系列的文章，用Hexo的二级分类。</p><h3 id="面试心经"><a href="#面试心经" class="headerlink" title="面试心经"></a>面试心经</h3><p>因为马上就要找工作了，所以肯定会进行很多次的面试。这个系列中就是有关面试的经历。既是对自己的一个反思，也希望能够给看到这些文章的人提供一些经验。</p><h3 id="源码探究"><a href="#源码探究" class="headerlink" title="源码探究"></a>源码探究</h3><p>顾名思义，【源码探究】系列就是我对一些源码的分析、学习。在程序员的道路上，想要成长，学习优秀的源码是必不可少的一部分。</p><h3 id="博学参省"><a href="#博学参省" class="headerlink" title="博学参省"></a>博学参省</h3><p>这个名字取自荀子的《劝学》中的<code>“君子博学而日参省乎己，则知明而行无过矣”</code>。寓意多学习、多反省。这个系列中写些我日常的反思、总结。</p><h2 id="博客写在哪里"><a href="#博客写在哪里" class="headerlink" title="博客写在哪里"></a>博客写在哪里</h2><p>除了在Github Pages上发表之外，同时也会在掘金、CSDN、博客园等社区论坛上以及微信公众号：<code>SuperBuilder</code>上更新。</p><h2 id="扫码关注，手有余香"><a href="#扫码关注，手有余香" class="headerlink" title="扫码关注，手有余香"></a>扫码关注，手有余香</h2><p><img src="https://blog-source-1258302212.cos.ap-beijing.myqcloud.com/20200108195503_dc35dac5c0d673f9e923020fc9b20eee.png" alt=""></p>]]></content>
+        <content type="html"><![CDATA[<h2 id="如何创建一个Hexo博客"><a href="#如何创建一个Hexo博客" class="headerlink" title="如何创建一个Hexo博客"></a>如何创建一个Hexo博客</h2><p>这个问题其实没有太大价值，因为网络上已经有很多关于此的文章，官网里的文档也写的非常清晰，本着不重复发明轮子的原则，在此不再赘述。</p><h2 id="使用自定义主题"><a href="#使用自定义主题" class="headerlink" title="使用自定义主题"></a>使用自定义主题</h2><p>我使用的是<a href="https://github.com/TriDiamond/hexo-theme-obsidian" target="_blank" rel="noopener">Obsidian</a>主题，至少在我现在看来主题还是挺好看的，配色、样式挺有科技感。移动端适配的也不错，并且作者看起来也还在更新。问题就是Bug挺多，我修改了一些问题，并且将它放在了我的<a href="https://github.com/lan-mao/hexo-theme-obsidian" target="_blank" rel="noopener">Github仓库</a>中，并且在作者更新了版本后尽量也更新。</p><h2 id="加速你的博客"><a href="#加速你的博客" class="headerlink" title="加速你的博客"></a>加速你的博客</h2><h3 id="加速不经常改动的资源"><a href="#加速不经常改动的资源" class="headerlink" title="加速不经常改动的资源"></a>加速不经常改动的资源</h3><p>如何加速，为了解决这个问题，我尝试了很多的解决方案，比如将博客放到到Coding上，但是发现Coding的IP在香港，在我这里访问更慢；另一个设置CDN加速，我尝试了七牛云和腾讯云两个平台，但不知道因为什么，并没有改善很多。</p><p>后来我发现如果部署到码云平台，它的page页面访问速度很快，但是码云的普通用户不能自定义域名，而且不会自动部署，上传之后必须手动部署才行。但另一方面，Github Pages可以自定义域名，并且还是很多个，支持自动部署。并且我发现，码云仓库的资源是可以直接访问的，而一些静态资源也不需要频繁更改，可以使用手工代替。更重要的是：放在码云上的文件不需要花钱。</p><p><img src="https://blog-source-1258302212.cos.ap-beijing.myqcloud.com/20200121105239_5d40b446b228b3950995bb6660d4f9c6.gif" alt=""></p><h3 id="把图片放在云上"><a href="#把图片放在云上" class="headerlink" title="把图片放在云上"></a>把图片放在云上</h3><p>图片就不能放在码云了，否则每次新写文章的时候就要手动部署一次，麻烦得很。不过使用VSCode的插件功能就可以自动上传图片到云端的资源库中。并且可以自动生成链接。用过Typora来写MD文章，虽然他的实时渲染功能十分炫酷，但是在Windows平台上不能用插件，使得我还是选择了VSCode。</p><p>腾讯云图片自动上传插件：<a href="https://marketplace.visualstudio.com/items?itemName=galenye.tencent-cloud-cos-upload-image" target="_blank" rel="noopener">tencent-cloud-cos-upload-image - Visual Studio Marketplace</a>，可以使用快捷键上传剪贴板上的图片和本地文件。</p><p>阿里云图床的插件：<a href="https://marketplace.visualstudio.com/items?itemName=vvkee.aliyun-oss-upload-image" target="_blank" rel="noopener">aliyun oss upload image - Visual Studio Marketplace</a></p><p>七牛云图床的自动上传插件：<a href="https://marketplace.visualstudio.com/items?itemName=imys.qiniu-upload-image" target="_blank" rel="noopener">qiniu-upload-image - Visual Studio Marketplace</a></p><blockquote><p>附一个插件：自动将剪贴板中的链接生成链接标签，并且标题是连接的标题，省好多事情：<a href="https://marketplace.visualstudio.com/items?itemName=kukushi.pasteurl" target="_blank" rel="noopener">Paste URL - Visual Studio Marketplace</a></p></blockquote>]]></content>
       
       
+      <categories>
+          
+          <category> 1/0世界 </category>
+          
+          <category> HEXO </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> HEXO </tag>
+            
+            <tag> 博客 </tag>
+            
+        </tags>
       
     </entry>
     
