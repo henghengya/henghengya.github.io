@@ -5,12 +5,12 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>线程入门（尽量详细） - 懒猫</title>
+    <title>synchronized的不同效果实验 - 懒猫</title>
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="google" content="notranslate" />
     <meta name="keywords" content="TriDiamond Obsidian,"> 
-    <meta name="description" content="尽量的"> 
+    <meta name="description" content="示例：synchronized方法。锁住的是this。多个线程同时使用一个对象，这个对象里面若有线程执行了这个对象的同步方法，此时其他线程不能使用该同步方法以及其他的同步方法，但是可以使用普通方法。,"> 
     <meta name="author" content="&lt;a href=&#34;https://github.com/lan-mao&#34; title=&#34;github&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;懒猫&lt;/a&gt;"> 
     <link rel="alternative" href="atom.xml" title="懒猫" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -58,7 +58,7 @@
     <div class="navigation animated fadeIn fast delay-1s">
         <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://blog.lan-mao.top">
         <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
-        <h3 class="subtitle">线程入门（尽量详细）</h3>
+        <h3 class="subtitle">synchronized的不同效果实验</h3>
         <div class="social">
             <!--        <div class="like-icon">-->
             <!--            <a href="javascript:;" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
@@ -85,25 +85,24 @@
         <div class="else">
             <p class="animated fadeInDown">
                 
-                <a href="/categories/1/0世界"><b>「
-                    </b>1/0世界<b> 」</b></a>
+                <a href="javascript:;"><b>「 </b>文章<b> 」</b></a>
                 
                 二月 10, 2020
             </p>
-            <h3 class="post-title animated fadeInDown"><a href="/2020/02/10/%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%88%E5%B0%BD%E9%87%8F%E8%AF%A6%E7%BB%86%EF%BC%89/" title="线程入门（尽量详细）" class="">线程入门（尽量详细）</a>
+            <h3 class="post-title animated fadeInDown"><a href="/2020/02/10/synchronized%E7%9A%84%E4%B8%8D%E5%90%8C%E6%95%88%E6%9E%9C%E5%AE%9E%E9%AA%8C/" title="synchronized的不同效果实验" class="">synchronized的不同效果实验</a>
             </h3>
             
             <p class="post-count animated fadeInDown">
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>文章字数</i>
-                    71
+                    8k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
-                    1 mins.
+                    7 mins.
                 </span>
                 
                 
@@ -115,8 +114,6 @@
                 
             </p>
             
-            
-            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/JAVA/" rel="tag">JAVA</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a></li></ul>
             
         </div>
     </div>
@@ -137,7 +134,10 @@
 <div class="article">
     <div class='main'>
         <div class="content markdown animated fadeIn">
-            <h1 id="尽量的"><a href="#尽量的" class="headerlink" title="尽量的"></a>尽量的</h1>
+            <p>示例：synchronized方法。锁住的是this。多个线程同时使用一个对象，这个对象里面若有线程执行了这个对象的同步方法，此时其他线程不能使用该同步方法以及其他的同步方法，但是可以使用普通方法。<br>public class TestSyn02 {<br>    public static void main(String[] args) {<br>        Test01 test = new Test01();<br>        new Thread(test, “1”).start();<br>        new Thread(test, “2”).start();<br>        new Thread(test, “3”).start();<br>    }<br>}<br>class Test01 implements Runnable{<br>    static int num = 0;<br>    public synchronized void synFaction1(){<br>        for (int i = 0; i &lt; 10; i++) {<br>            try {<br>                Thread.sleep(100);<br>                System.out.println(“1” + “—–&gt;” +Thread.currentThread().getName() +”—–&gt;” + i);<br>            } catch (InterruptedException e) {<br>                e.printStackTrace();<br>            }<br>        }<br>    }<br>    public synchronized void synFaction2(){<br>        for (int i = 0; i &lt; 10; i++) {<br>            try {<br>                Thread.sleep(100);<br>                System.out.println(“2” + “—–&gt;” +Thread.currentThread().getName() +”—–&gt;” + i);<br>            } catch (InterruptedException e) {<br>                e.printStackTrace();<br>            }<br>        }<br>    }<br>    public void synFaction3(){<br>        for (int i = 0; i &lt; 10; i++) {<br>            try {<br>                Thread.sleep(100);<br>                System.out.println(“3” + “—–&gt;” +Thread.currentThread().getName() +”—–&gt;” + i);<br>            } catch (InterruptedException e) {<br>                e.printStackTrace();<br>            }<br>        }<br>    }<br>    @Override<br>    public void run() {<br>        switch (num){<br>            case 0:{ num++; synFaction1(); break;}<br>            case 1:{ num++; synFaction2(); break;}<br>            case 2:synFaction3();<br>        }<br>    }<br>}<br>运行的结果：<br>3—–&gt;3—–&gt;0<br>1—–&gt;1—–&gt;0<br>1—–&gt;1—–&gt;1<br>3—–&gt;3—–&gt;1<br>3—–&gt;3—–&gt;2<br>1—–&gt;1—–&gt;2<br>2—–&gt;2—–&gt;0<br>2—–&gt;2—–&gt;1<br>2—–&gt;2—–&gt;2<br>    1. 如果给静态方法加synchronized，那么同步锁加在了类上，类中其他加了同步锁的静态方法都不能用，但是未加同步锁的静态方法和所有的实例方法可以使用。也就是说，静态方法的同步锁和实例方法的同步锁不是同一个锁，互不干涉。<br>public class TestSyn03 {<br>    public static void main(String[] args) {<br>        Test02 test = new Test02();<br>        Test02 test2 = new Test02();<br>        new Thread(test,”1”).start();<br>        new Thread(test2,”2”).start();<br>        new Thread(test,”3”).start();<br>        new Thread(test,”4”).start();<br>        new Thread(test,”5”).start();<br>    }<br>}<br>class Test02 implements Runnable{<br>    public synchronized static void synFaction1(){<br>        for (int i = 0; i &lt; 3; i++) {<br>            try {<br>                Thread.sleep(100);<br>                System.out.println(“同步——第一个对象静态同步方法”);<br>            } catch (InterruptedException e) {<br>                e.printStackTrace();<br>            }<br>        }<br>    }<br>    public synchronized static void synFaction2(){<br>        for (int i = 0; i &lt; 3; i++) {<br>            try {<br>                Thread.sleep(100);<br>                System.out.println(“同步——第二个对象静态同步方法”);<br>            } catch (InterruptedException e) {<br>                e.printStackTrace();<br>            }<br>        }<br>    }<br>    public static void synFaction3(){<br>        for (int i = 0; i &lt; 3; i++) {<br>            try {<br>                Thread.sleep(100);<br>                System.out.println(“非同步——静态非同步方法”);<br>            } catch (InterruptedException e) {<br>                e.printStackTrace();<br>            }<br>        }<br>    }<br>    public synchronized  void synFaction4(){<br>        for (int i = 0; i &lt; 3; i++) {<br>            try {<br>                Thread.sleep(100);<br>                System.out.println(“同步——实例同步方法”);<br>            } catch (InterruptedException e) {<br>                e.printStackTrace();<br>            }<br>        }<br>    }<br>    public synchronized  void synFaction5(){<br>        for (int i = 0; i &lt; 3; i++) {<br>            try {<br>                Thread.sleep(100);<br>                System.out.println(“非同步——实例非同步方法”);<br>            } catch (InterruptedException e) {<br>                e.printStackTrace();<br>            }<br>        }<br>    }<br>    @Override<br>    public void run() {<br>        switch (Thread.currentThread().getName()){<br>            case “1”:synFaction1(); break;<br>            case “2”:synFaction2(); break;<br>            case “3”:synFaction3(); break;<br>            case “4”:synFaction4(); break;<br>            case “5”:synFaction5(); break;<br>        }<br>    }<br>}<br>显示结果：<br>同步——第二个对象静态同步方法<br>非同步——静态非同步方法<br>非同步——实例非同步方法<br>非同步——实例非同步方法<br>同步——第二个对象静态同步方法<br>非同步——静态非同步方法<br>非同步——实例非同步方法<br>非同步——静态非同步方法<br>同步——第二个对象静态同步方法<br>同步——实例同步方法<br>同步——第一个对象静态同步方法<br>同步——第一个对象静态同步方法<br>同步——实例同步方法<br>同步——实例同步方法<br>同步——第一个对象静态同步方法<br>    3. 使用synchronized方法块，锁住this<br>    如示例中，在run方法中用同步块锁住this，在main线程直接调用test1的testSyn1()方法和线程1中通过run()方法调用test1的testSyn1()方法，此时两者交替输出，似乎this没有被锁住。但当我们同时调用test2的run方法时，一个运行完了，另一个才开始运行。<br>    这是因为main线程在调用test1.testSyn1()时，没有进行锁的判断，所以可以直接运行。而调用run()方法时，因为run方法里有同步锁，需要先判断这个对象是否被锁住，因此会变成阻塞<br>public class TestSyn04 {<br>    public static void main(String[] args) {<br>        Test03 test1 = new Test03();<br>        test1.name = “test”;<br>        Test03 test2 = new Test03();<br>        test2.name = “test2”;<br>        new Thread(test1, “线程1”).start();<br>        for (int i = 0; i &lt; 5; i++) {<br>            test1.testSyn1();<br>            try {<br>                Thread.sleep(100);<br>            } catch (InterruptedException e) {<br>                e.printStackTrace();<br>            }<br>        }<br>        new Thread(test2, “线程2”).start();<br>        test2.run();<br>    }<br>}<br>class Test03 implements Runnable{<br>    String name;<br>    public void testSyn1(){<br>        System.out.println(Thread.currentThread().getName()+”\t实例” +name);<br>    }<br>    @Override<br>    public void run() {<br>        synchronized (this){<br>            for (int i = 0; i &lt; 5; i++) {<br>                testSyn1();<br>                try {<br>                    Thread.sleep(100);<br>                } catch (InterruptedException e) {<br>                    e.printStackTrace();<br>                }<br>            }<br>        }<br>    }<br>}<br>运行结果：<br>    线程1    实例test<br>    main    实例test<br>    线程1    实例test<br>    main    实例test<br>    main    实例test<br>    线程1    实例test<br>    main    实例test2<br>    main    实例test2<br>    main    实例test2<br>    线程2    实例test2<br>    线程2    实例test2<br>    线程2    实例test2</p>
+<pre><code>4. 使用synchronized方法块锁住类、锁住对象，省略
+5. 同步方法和同步块同时使用</code></pre><p>public class TestSyn05 {<br>    public static void main(String[] args) {<br>        Test04 test = new Test04();<br>        new Thread(test).start();<br>        test.testSyn1();<br>    }<br>}<br>class Test04 implements Runnable{<br>    public synchronized void testSyn1(){<br>        for (int i = 0; i &lt; 5; i++) {<br>            try {<br>                Thread.sleep(100);<br>                System.out.println(Thread.currentThread().getName());<br>            } catch (InterruptedException e) {<br>                e.printStackTrace();<br>            }<br>        }<br>    }<br>    @Override<br>    public void run() {<br>        synchronized (this){<br>            for (int i = 0; i &lt; 5; i++) {<br>                try {<br>                    Thread.sleep(100);<br>                    System.out.println(Thread.currentThread().getName());<br>                } catch (InterruptedException e) {<br>                    e.printStackTrace();<br>                }<br>            }<br>        }<br>    }<br>}<br>结果：<br>main<br>main<br>main<br>Thread-0<br>Thread-0<br>Thread-0<br>这个例子里，同步方法和同步块分别在两个线程里调用，而同步块锁住的是this。我们发现两者发生了互斥的结果，这反应了同步方法其实锁住了this，即当前调用的对象。<br>同理，对类的同步锁也是如此，即同步静态方法其实锁住了这个类。<br>通过上面的分析，我们可以分析出以下的同步过程：<br>同步实例方法就是锁住this的同步块，而同步静态方法就是锁住类.class的同步块，但同时，类与这个类的对象直接不是一个同步锁，两者互不影响。<br>而普通方法，或者没有判断锁的代码依然可以调用被锁住的类，因为运行这些代码的时候，没有经过判断这个类或者对象是否被锁住，形不成阻塞，所以依旧可以使用。</p>
+
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
                 data-autoplay="true">
@@ -194,7 +194,7 @@
                 <div class="subbox">
                     <img src="/头像.jpg" height=300 width=300></img>
                     <p><a href="https://github.com/lan-mao" target="_blank"><a href="https://github.com/lan-mao" title="github" target="_blank" rel="noopener">懒猫</a></a></p>
-                    <span>艺术家思维去思考问题，工匠创造精神去开发</span>
+                    <span>这些困难我们总归要跨过去，为什么不是现在呢</span>
                     <!-- <dl>
                         <dd><a href="https://github.com/lan-mao" target="_blank"><span
                                     class=" iconfont icon-github"></span></a></dd>
@@ -205,20 +205,13 @@
                     </dl> -->
                 </div>
                 <ul>
-                    <li><a href="/">2 <p>文章</p></a></li>
-                    <li><a href="/categories">3 <p>分类</p></a></li>
-                    <li><a href="/tags">4 <p>标签</p></a></li>
+                    <li><a href="/">3 <p>文章</p></a></li>
+                    <li><a href="/categories">2 <p>分类</p></a></li>
+                    <li><a href="/tags">2 <p>标签</p></a></li>
                 </ul>
             </div>
             
             
-            
-            <div class="box sticky animated fadeInRight faster">
-                <div id="toc" class="subbox">
-                    <h4>目录</h4>
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#尽量的"><span class="toc-number">1.</span> <span class="toc-text">尽量的</span></a></li></ol>
-                </div>
-            </div>
             
             
         </div>
@@ -474,7 +467,7 @@
         var typedTextEl = $('.typed-text');
         if (typedTextEl && typedTextEl.length > 0) {
             var typed = new Typed('.typed-text', {
-                strings: ["艺术家思维去思考问题，工匠创造精神去开发", "Think like an artist, develop like an artisan"],
+                strings: ["这些困难我们总归要跨过去，为什么不是现在呢", "只有那些疯狂到认为自己可以改变世界的人才能真正地改变世界"],
                 typeSpeed: 90,
                 loop: true,
                 loopCount: Infinity,
