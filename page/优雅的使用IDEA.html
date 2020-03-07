@@ -1,0 +1,416 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>懒猫</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    
+    <meta name="author" content="&lt;a href=&#34;https://github.com/lan-mao&#34; title=&#34;github&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;懒猫&lt;/a&gt;"> 
+    <link rel="alternative" href="atom.xml" title="懒猫" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    
+<link rel="stylesheet" href="https://lan-mao.gitee.io/css/font_1429596_nzgqgvnmkjb.css">
+
+    
+<link rel="stylesheet" href="https://lan-mao.gitee.io/css/animate.min.css">
+
+    
+<link rel="stylesheet" href="https://lan-mao.gitee.io/css/share.min.css">
+
+    
+<link rel="stylesheet" href="https://lan-mao.gitee.io/css/codemirror.min.css">
+
+    
+<link rel="stylesheet" href="https://lan-mao.gitee.io/css/dracula.css">
+
+    
+<link rel="stylesheet" href="https://lan-mao.gitee.io/css/obsidian.css">
+
+    
+<link rel="stylesheet" href="https://lan-mao.gitee.io/css/ball-atom.min.css">
+
+    <meta name="baidu-site-verification" content="HA3QQDT965" />
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <span id="config-title" style="display:none">懒猫</span>
+    <div id="loader"></div>
+    <div id="single" class="page">
+    <div id="top">
+        <a class="iconfont icon-left image-icon" href="javascript:history.back()"></a>
+    </div>
+    <div class="clone-element"></div>
+    <div class="section dark-obsidian">
+        <div class="article animated fadeIn">
+            <div class="main animated fadeIn">
+                <div class="content animated fadeIn">
+                
+                        <p>IDEA作为Java界最好用的IDE，有大量的选项和插件供我们调教出自己喜欢的样式</p>
+<h2 id="调节配置参数"><a href="#调节配置参数" class="headerlink" title="调节配置参数"></a>调节配置参数</h2><p>需要注意的是，配置这两个文件要在IDEA的Help菜单中打开，或者在开始界面打开  </p>
+<p><img src="https://blog-source-1258302212.cos.ap-beijing.myqcloud.com/20200307105500_7dda15f5c58aadd99071aa7d2e411cd4.png" alt="20200307105500_7dda15f5c58aadd99071aa7d2e411cd4.png"></p>
+<p><img src="https://blog-source-1258302212.cos.ap-beijing.myqcloud.com/20200307105624_43b0bb26d8c8e9fbcdffc6983b31211e.png" alt="20200307105624_43b0bb26d8c8e9fbcdffc6983b31211e.png"></p>
+<h3 id="调节JVM虚拟机的运行参数"><a href="#调节JVM虚拟机的运行参数" class="headerlink" title="调节JVM虚拟机的运行参数"></a>调节JVM虚拟机的运行参数</h3><ul>
+<li>-Xms128m，分配堆内存时初始内存。16G内存的机器可尝试设置为 -Xms512m</li>
+<li>-Xmx750m，最大可使用的堆内存。16G内存的机器可尝试设置为 -Xmx2048m</li>
+<li>-XX:ReservedCodeCacheSize=225m，16G内存的机器可尝试设置为-XX:ReservedCodeCacheSize=500m</li>
+</ul>
+<h3 id="调节IDEA的个性化配置"><a href="#调节IDEA的个性化配置" class="headerlink" title="调节IDEA的个性化配置"></a>调节IDEA的个性化配置</h3><ul>
+<li>idea.cycle.buffer.size=1024，该属性主要用于控制控制台输出缓存。有遇到一些项目开启很多输出，控制台很快就被刷满了没办法再自动输出后面内容，这种项目建议增大该值或是直接禁用掉，禁用语句 idea.cycle.buffer.size=disabled。</li>
+<li>idea.max.intellisense.filesize=2500，该属性主要用于提高在编辑大文件时候的代码帮助。IntelliJ IDEA 在编辑大文件的时候还是很容易卡顿的。该属性用于设置类文件的最大大小，如果超过这个大小可能导致类文件无法加载。可以调大一些：idea.max.intellisense.filesize=5000</li>
+<li>idea.system.path=${user.home}/.IntelliJIdea/system，该属性主要用于指向 IntelliJ IDEA 的系统文件目录，默认是被注释，打开注释之后才算启用该属性，这里需要特别注意的是斜杠方向，这里用的是正斜杠。如果你的项目很多，则该目录会很大，如果你的 C 盘空间不够的时候，还是建议把该目录转移到其他盘符下。</li>
+<li>idea.config.path=${user.home}/.IntelliJIdea/config，该属性主要用于指向 IntelliJ IDEA 的个性化配置目录，默认是被注释，打开注释之后才算启用该属性，这里需要特别注意的是斜杠方向，这里用的是正斜杠。其实这里可以把路径设置到OneDrive网盘的位置，这样就可以自动地备份、同步了。</li>
+</ul>
+<h2 id="设置IDEA的选项"><a href="#设置IDEA的选项" class="headerlink" title="设置IDEA的选项"></a>设置IDEA的选项</h2><p>需要注意，IDEA中的有一些设置在打开项目之后的设置默认是不影响到另一个项目的，如果想要调节全局设置，可以设置在开始界面的Configure菜单的Setting选项</p>
+<h3 id="让IDEA更好看"><a href="#让IDEA更好看" class="headerlink" title="让IDEA更好看"></a>让IDEA更好看</h3><h4 id="设置鼠标悬浮提示"><a href="#设置鼠标悬浮提示" class="headerlink" title="设置鼠标悬浮提示"></a>设置鼠标悬浮提示</h4><p>即当鼠标移动到类或者方法上时，可以提示类或方法信息。</p>
+<p><img src="https://blog-source-1258302212.cos.ap-beijing.myqcloud.com/20200307110545_2f784c38cec6cc19d21909ea94a6e7e5.png" alt="20200307110545_2f784c38cec6cc19d21909ea94a6e7e5.png"></p>
+<h4 id="开启行号和方法线"><a href="#开启行号和方法线" class="headerlink" title="开启行号和方法线"></a>开启行号和方法线</h4><p><img src="https://blog-source-1258302212.cos.ap-beijing.myqcloud.com/20200307111027_3579644aa23d08eea3629396afce7205.png" alt="20200307111027_3579644aa23d08eea3629396afce7205.png"></p>
+<h4 id="滑动到最后还可以继续滑"><a href="#滑动到最后还可以继续滑" class="headerlink" title="滑动到最后还可以继续滑"></a>滑动到最后还可以继续滑</h4><p><img src="https://blog-source-1258302212.cos.ap-beijing.myqcloud.com/20200307111107_60f8a435236b6c6410e8774964193996.png" alt="20200307111107_60f8a435236b6c6410e8774964193996.png"></p>
+<h3 id="设置代码换行"><a href="#设置代码换行" class="headerlink" title="设置代码换行"></a>设置代码换行</h3><ol>
+<li>根据屏幕宽度换行。这是软换行，并不是真的换行<br> <img src="https://blog-source-1258302212.cos.ap-beijing.myqcloud.com/20200307111310_daa103a9ea626cbfa1ab47600914c188.png" alt="20200307111310_daa103a9ea626cbfa1ab47600914c188.png"></li>
+<li>根据代码长度换行。是真的换行<br><img src="https://blog-source-1258302212.cos.ap-beijing.myqcloud.com/20200307111422_b13ea302b8b828ecf8aa0a53e6c20f62.png" alt="20200307111422_b13ea302b8b828ecf8aa0a53e6c20f62.png"></li>
+</ol>
+<h3 id="取消保存自动删除行尾空格"><a href="#取消保存自动删除行尾空格" class="headerlink" title="取消保存自动删除行尾空格"></a>取消保存自动删除行尾空格</h3><p>IDEA在默认情况下会自动删除行尾的空格，这样可能造成在git上即使我们没有修改代码，但还是提示有修改。</p>
+<p><img src="https://blog-source-1258302212.cos.ap-beijing.myqcloud.com/20200307111701_342873369383e5541921695a4f6c5154.png" alt="20200307111701_342873369383e5541921695a4f6c5154.png"></p>
+<h3 id="自动导入包"><a href="#自动导入包" class="headerlink" title="自动导入包"></a>自动导入包</h3><p><img src="https://blog-source-1258302212.cos.ap-beijing.myqcloud.com/20200307111822_fb855f18f38147656c13893460b29058.png" alt="20200307111822_fb855f18f38147656c13893460b29058.png">  </p>
+<p>这里的选项1代表在书写代码时自动优化导入的包，比如去掉一些没用的包。选项2代表在书写代码时自动导入包。但对于同名的包，还需要<code>Alt+Enter</code>手动导入。</p>
+<h3 id="代码提示"><a href="#代码提示" class="headerlink" title="代码提示"></a>代码提示</h3><p>Idea的代码提示默认区分大小写，默认为<code>First Letter Only</code>。我们可以取消<code>Match case</code>选项，这样就不区分大小写了。</p>
+<p><img src="https://blog-source-1258302212.cos.ap-beijing.myqcloud.com/20200307111953_91280125911225f4708be29e98e08160.png" alt="20200307111953_91280125911225f4708be29e98e08160.png"></p>
+<p>在一些需要写SQL语句的地方，比如MyBatis的映射文件，我们也希望它可以像写代码一样提供表信息等的提示。这可以更改下面的两个地方实现</p>
+<p><img src="https://blog-source-1258302212.cos.ap-beijing.myqcloud.com/20200307112147_b6d2708fc8dc0d3f7b0c20ce6721adb2.png" alt="20200307112147_b6d2708fc8dc0d3f7b0c20ce6721adb2.png"></p>
+<p><img src="https://blog-source-1258302212.cos.ap-beijing.myqcloud.com/20200307112155_e9a972bc436aa491f329c1f1113c13fa.png" alt="20200307112155_e9a972bc436aa491f329c1f1113c13fa.png"></p>
+<h2 id="IDEA的编码问题"><a href="#IDEA的编码问题" class="headerlink" title="IDEA的编码问题"></a>IDEA的编码问题</h2><h3 id="IDEA的默认编码和项目编码"><a href="#IDEA的默认编码和项目编码" class="headerlink" title="IDEA的默认编码和项目编码"></a>IDEA的默认编码和项目编码</h3><p>在<code>Editor -&gt; File Encodings</code> 选项卡中</p>
+<ul>
+<li>IDE 的编码默认是 UTF-8，Project Encoding 默认是 GBK，修改为 UTF-8。</li>
+<li>properties设置了专门的编码，建议设为UTF-8，并且勾选Transparent native-to-ascii conversion 选项，该选项主要用于转化ASCII字符，一般都要勾选，不然 Properties 文件中的注释显示的都不会是中文。</li>
+</ul>
+<p><img src="https://blog-source-1258302212.cos.ap-beijing.myqcloud.com/20200307112817_f321b52d0f616715dd63b4475489b84c.png" alt="20200307112817_f321b52d0f616715dd63b4475489b84c.png"></p>
+<h3 id="设置文件的字体"><a href="#设置文件的字体" class="headerlink" title="设置文件的字体"></a>设置文件的字体</h3><p>字体中必须包含中文，否则依然可能造成乱码、字符显示不出等问题</p>
+<p><img src="https://blog-source-1258302212.cos.ap-beijing.myqcloud.com/20200307112935_5416d21d86f606349c46a6d92eb99836.png" alt="20200307112935_5416d21d86f606349c46a6d92eb99836.png"></p>
+<p>如图选项<code>Show only monospaced fonts</code>为只显示等宽字体，个人喜欢使用<code>Microsoft Yahei Mono</code>字体，包含中英文，样式和<code>Consola</code>字体类似。</p>
+<h3 id="设置控制台的字体"><a href="#设置控制台的字体" class="headerlink" title="设置控制台的字体"></a>设置控制台的字体</h3><p>如果控制台字体出现乱码则需要修改该选项：</p>
+<p><img src="https://blog-source-1258302212.cos.ap-beijing.myqcloud.com/20200307113039_fe56bb7bbba5a143eb6fb9efd6811bc3.png" alt="20200307113039_fe56bb7bbba5a143eb6fb9efd6811bc3.png"></p>
+<h3 id="Tomcat乱码"><a href="#Tomcat乱码" class="headerlink" title="Tomcat乱码"></a>Tomcat乱码</h3><p>如果你的 Tomcat 控制台输出乱码，并且你已经保证了本文上面的控制台字体设置的字体包含中文，那你还可以尝试下在 Tomcat 的 VM 参数上加上：<code>-Dfile.encoding=UTF-8</code></p>
+<h2 id="使用待办事项"><a href="#使用待办事项" class="headerlink" title="使用待办事项"></a>使用待办事项</h2><p>我们可以使用TODO语句创建一个代办事项。待办事项的在下方的TODO窗口中可以看到。</p>
+<p><img src="https://blog-source-1258302212.cos.ap-beijing.myqcloud.com/20200307113236_e3d5eb1883730bef65b54271618bb39d.png" alt="20200307113236_e3d5eb1883730bef65b54271618bb39d.png"></p>
+<p>如图所示，可以创建单行注释，也可以创建多行注释。使用多行注释的时候需要注意，第二行必须有缩进，不然就会只是当做普通注释</p>
+<h2 id="快捷键设置"><a href="#快捷键设置" class="headerlink" title="快捷键设置"></a>快捷键设置</h2><ol>
+<li><p>在Windows系统中，因为<code>Ctrl+Space</code>被系统的输入法占用掉了，所以可以更改为<code>Ctrl+,</code></p>
+<p> <img src="https://blog-source-1258302212.cos.ap-beijing.myqcloud.com/20200307113648_9d6cb1c580e51c2f3c1fd9f9de950481.png" alt="20200307113648_9d6cb1c580e51c2f3c1fd9f9de950481.png"></p>
+</li>
+<li><p>启用<code>Ctrl+鼠标滚轮</code>调节字体大小<br><img src="https://blog-source-1258302212.cos.ap-beijing.myqcloud.com/20200307113956_cb98bde763ec7ce8eafc7627e16e11da.png" alt="20200307113956_cb98bde763ec7ce8eafc7627e16e11da.png"></p>
+</li>
+</ol>
+<h2 id="插件推荐"><a href="#插件推荐" class="headerlink" title="插件推荐"></a>插件推荐</h2><ol>
+<li>String Manipulation<br>这个插件可以对字符串进行一些大小写转换等操作，默认的快捷键是<code>Alt+M</code><br><img src="https://blog-source-1258302212.cos.ap-beijing.myqcloud.com/20200307114359_6c474f3f0f6e2c207e166b36e055f4ff.png" alt="20200307114359_6c474f3f0f6e2c207e166b36e055f4ff.png"></li>
+<li>Rainbow Brackets<br>将括号变成彩色，分辨一大堆括号可以更有层次感</li>
+<li>Gitee<br>类似于IDEA中默认有的Github插件，Gitee插件提供了对码云仓库的一些访问</li>
+</ol>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://youmeek.gitbooks.io/intellij-idea-tutorial/content/" target="_blank" rel="noopener">Introduction · IntelliJ-IDEA-Tutorial</a></li>
+<li><a href="https://www.cnblogs.com/zhangpengshou/p/5366413.html" target="_blank" rel="noopener">IntelliJ Idea 常用快捷键列表 - 一路前行 - 博客园</a></li>
+</ul>
+
+                
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2020
+        <span class="gradient-text">
+            <a href="https://github.com/lan-mao" title="懒猫" target="_blank" rel="noopener">懒猫</a>
+        </span>.
+        Powered by 
+        <span class="gradient-text">
+            <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        </span>
+        Theme by 
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
+        </span>
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.3" target="_blank" rel="noopener">v1.4.3</a></small>
+        Hosted by
+        <span class="gradient-text">
+            <a href="https://pages.github.com/" title="Github Pages" target="_blank" rel="noopener">Github Pages</a>
+        </span>
+    </p>
+    <p class="copyright" id="copyright">
+        本站总访问量<span id="busuanzi_value_site_pv" class="gradient-text"></span>次 && 
+        本站访客数<span id="busuanzi_value_site_uv" class="gradient-text"></span>人次  
+        <a href="http://www.beian.miit.gov.cn" title="工信部备案号" target="_blank" rel="noopener">鲁ICP备<span class="gradient-text">19009995</span>号</a>
+    </p>
+</footer>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
+
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
+
+
+
+    
+<link rel="stylesheet" href="https://lan-mao.gitee.io/css/gitalk.min.css">
+
+    
+<script src="https://lan-mao.gitee.io/js/gitalk.min.js"></script>
+
+
+
+<script src="https://lan-mao.gitee.io/js/jquery.min.js"></script>
+<script src="https://lan-mao.gitee.io/js/plugin.js"></script>
+<script src="https://lan-mao.gitee.io/js/obsidian.js"></script>
+<script src="https://lan-mao.gitee.io/js/jquery.truncate.js"></script>
+<script src="https://lan-mao.gitee.io/js/search.js"></script>
+
+
+<script src="https://lan-mao.gitee.io/js/typed.min.js"></script>
+
+
+<script src="https://lan-mao.gitee.io/js/md5.min.js"></script>
+
+
+<script src="https://lan-mao.gitee.io/js/social-share.min.js"></script>
+
+
+<script src="https://lan-mao.gitee.io/js/codemirror.min.js"></script>
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/java/java.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/sql/sql.min.js"></script>
+
+
+    
+<script src="//cdn.bootcss.com/codemirror/5.48.4/mode/markdown/markdown.min.js"></script>
+
+
+
+
+    
+<script src="https://lan-mao.gitee.io/js/busuanzi.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
+        });
+    </script>
+
+
+
+<link rel="stylesheet" href="https://lan-mao.gitee.io/css/photoswipe.min.css">
+<link rel="stylesheet" href="https://lan-mao.gitee.io/css/default-skin.min.css">
+
+
+<script src="https://lan-mao.gitee.io/js/photoswipe.min.js"></script>
+<script src="https://lan-mao.gitee.io/js/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["这些困难我们总归要跨过去，为什么不是现在呢", "只有那些疯狂到认为自己可以改变世界的人才能真正地改变世界"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+    
+</html>
