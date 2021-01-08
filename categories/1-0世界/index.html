@@ -146,37 +146,36 @@
             <a href="/categories/1/0世界"><b>「
                 </b>1/0世界<b> 」</b></a>
             
-            四月 09, 2020
+            一月 08, 2021
         </p>
         <h3 class="post-title animated fadeInDown">
-            <a href="/2020/04/09/%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AA%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90%E5%99%A8/" title="编写一个词法分析器" class="posttitle">编写一个词法分析器</a></h3>
+            <a href="/2021/01/08/%E4%BD%BF%E7%94%A8%E8%85%BE%E8%AE%AF%E4%BA%91CDN%E5%8A%A0%E9%80%9FHEXO%E5%8D%9A%E5%AE%A2/" title="使用腾讯云CDN加速HEXO博客" class="posttitle">使用腾讯云CDN加速HEXO博客</a></h3>
         
         <p class="post-count animated fadeInDown">
             
             <span>
                 <b class="iconfont icon-text2"></b> <i>文章字数</i>
-                23k
+                3.1k
             </span>
             
             
             <span>
                 <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
-                21 mins.
+                3 mins.
             </span>
             
             
         </p>
         
         
-        <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/JAVA/" rel="tag">JAVA</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/" rel="tag">编译原理</a></li></ul>
+        <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/CDN/" rel="tag">CDN</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/HEXO/" rel="tag">HEXO</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E5%8D%9A%E5%AE%A2/" rel="tag">博客</a></li></ul>
         
         <div class="md-content animated fadeIn">
             
-            <blockquote>
-<p>首先声明，文中的一些名称可能不太标准，大部分是我自己的理解。各位看官多多包涵，如果有一些建议可以提出来，我会酌情更改<br>这个词法分析器默认输入的全是 ASCII 码。<br>具体的代码实现使用的语言是Java</p>
-...</blockquote>
+            <p>其实就像如何把大象装进冰箱里一样——（把冰箱门打开，把大象装进去，把冰箱门关上），使用CDN加速博客也简单的分为：部署博客，打开CDN，用CDN加速博客。（逃~~）</p>
+<p>咳咳，扯远了。这里讲了如何使用腾讯...</p>
             
-            <span class="read-more"><a href="/2020/04/09/%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AA%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90%E5%99%A8/" title="查看全文" class="posttitle">查看全文</a>
+            <span class="read-more"><a href="/2021/01/08/%E4%BD%BF%E7%94%A8%E8%85%BE%E8%AE%AF%E4%BA%91CDN%E5%8A%A0%E9%80%9FHEXO%E5%8D%9A%E5%AE%A2/" title="查看全文" class="posttitle">查看全文</a>
                 <b class="iconfont icon-arrow-right- gradient-text"></b></span>
         </div>
     </div>
@@ -210,6 +209,107 @@
                   <b>「 </b>1/0世界<b> 」</b>
                 </a>
             
+            四月 09, 2020
+        </p>
+        <h3 class="post-title animated fadeInDown"><a href="/2020/04/09/%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AA%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90%E5%99%A8/" title="编写一个词法分析器" class="posttitle">编写一个词法分析器</a></h3>
+        
+            <p class="post-count animated fadeInDown">
+                
+                    <span>
+                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                        12k
+                    </span>
+                
+                
+                    <span>
+                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                        11 mins.
+                    </span>
+                
+                
+            </p>
+            
+                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/JAVA/" rel="tag">JAVA</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/" rel="tag">编译原理</a></li></ul>
+            
+        
+        <div class="md-content animated fadeIn">
+            
+                <blockquote>
+<p>首先声明，文中的一些名称可能不太标准，大部分是我自己的理解。各位看官多多包涵，如果有一些建议可以提出来，我会酌情更改<br>这个词法分析器默认输入的全是 ASCII 码。<br>具体的代码实现使用的语言是Java</p>
+</blockquote>
+<p>这个词法分析器有18个令牌。</p>
+<pre><code>⟨letter⟩ → a | b | ... | z | A | B | ... | Z
+⟨digit⟩ → 0 | 1 | ... | 9
+⟨id⟩ → ⟨letter⟩ {⟨letter⟩ | ⟨digit⟩}
+⟨int⟩ → [+|−] {⟨digit⟩}+
+⟨...</code></pre>
+            
+            <span class="read-more"><a href="/2020/04/09/%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AA%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90%E5%99%A8/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
+        </div>
+    </div>
+</div>
+
+
+<div class="post" id="post">
+    <div class="post-cover animated fadeIn" style="
+            background-image:
+            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+            url(/img/welcome-cover.jpg);">
+    </div>
+    <div class="else">
+        <p class="animated fadeInDown">
+            
+                <a href="/categories/1/0世界">
+                  <b>「 </b>1/0世界<b> 」</b>
+                </a>
+            
+            二月 10, 2020
+        </p>
+        <h3 class="post-title animated fadeInDown"><a href="/2020/02/10/%E4%BC%98%E9%9B%85%E7%9A%84%E4%BD%BF%E7%94%A8IDEA/" title="优雅的使用IDEA" class="posttitle">优雅的使用IDEA</a></h3>
+        
+            <p class="post-count animated fadeInDown">
+                
+                    <span>
+                        <b class="iconfont icon-text2"></b> <i>文章字数</i>
+                        7.1k
+                    </span>
+                
+                
+                    <span>
+                        <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
+                        6 mins.
+                    </span>
+                
+                
+            </p>
+            
+                <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/IDEA/" rel="tag">IDEA</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E5%B7%A5%E5%85%B7/" rel="tag">工具</a></li></ul>
+            
+        
+        <div class="md-content animated fadeIn">
+            
+                <p>IDEA作为Java界最好用的IDE（不接受反驳，不听不听不听），有大量的选项和插件供我们调教出自己喜欢的样式</p>
+<p>配置参数调节主要用到两个文件：<code>idea.properties</code>和<code>idea64.exe.vmoptions</code>。<code>idea.properties</code>文件配置的是IDEA的自身的相关配置，例如IDEA的插件目录、系统文件目录、配置文件目录等等；<code>idea64.exe.vmoptions</code>是IDEA运行的JVM环境配置，例如运行内存等<br>可以直接在IDEA的安装目录的<code>bin</code>文件夹下直接打开这两个文件，但是建议在...</p>
+            
+            <span class="read-more"><a href="/2020/02/10/%E4%BC%98%E9%9B%85%E7%9A%84%E4%BD%BF%E7%94%A8IDEA/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
+        </div>
+    </div>
+</div>
+
+
+<div class="post" id="post">
+    <div class="post-cover animated fadeIn" style="
+            background-image:
+            radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+            url(/img/welcome-cover.jpg);">
+    </div>
+    <div class="else">
+        <p class="animated fadeInDown">
+            
+                <a href="/categories/1/0世界">
+                  <b>「 </b>1/0世界<b> 」</b>
+                </a>
+            
             一月 08, 2020
         </p>
         <h3 class="post-title animated fadeInDown"><a href="/2020/01/08/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AAHexo%E5%8D%9A%E5%AE%A2/" title="创建一个Hexo博客" class="posttitle">创建一个Hexo博客</a></h3>
@@ -218,13 +318,13 @@
                 
                     <span>
                         <b class="iconfont icon-text2"></b> <i>文章字数</i>
-                        2.3k
+                        3.6k
                     </span>
                 
                 
                     <span>
                         <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
-                        2 mins.
+                        3 mins.
                     </span>
                 
                 
@@ -236,8 +336,9 @@
         <div class="md-content animated fadeIn">
             
                 <p>这个问题其实没有太大价值，因为网络上已经有很多关于此的文章，官网里的文档也写的非常清晰，本着不重复发明轮子的原则，在此不再赘述。</p>
-<p>我使用的是<a href="https://github.com/TriDiamond/hexo-theme-obsidian" target="_blank" rel="noopener">Obsidian</a>主题，至少在我现在看来主题还是挺好看的，配色、样式挺有科技感。移动端适配的也不错，并且作者看起来也还在更新。问题就是Bug挺多，我修改了一些问题，并且将它放在了我的<a href="https://github.com/lan-mao/hexo-theme-obsidian" target="_blank" rel="noopener">Github仓库</a>中，并且在作者更新了版本后尽量也更新。</p>
-<h3 id="加速不经常改动的资源"><a href="#加速不经常改动的资源" class="headerlink" title="加速不经常改动的资源"></a>加速不经常改动的资源</h3><p>如何加速，为了解决这个问题，我尝试了很多的解决方案，比如将博客放到到Coding上，但是发现Coding...</p>
+<p>我使用的是<a href="https://github.com/TriDiamond/hexo-theme-obsidian" target="_blank" rel="noopener">Obsidian</a> 主题</p>
+<h3 id="加速不经常改动的资源"><a href="#加速不经常改动的资源" class="headerlink" title="加速不经常改动的资源"></a>加速不经常改动的资源</h3><p>如何加速，为了解决这个问题，我尝试了很多的解决方案，比如将博客放到到Coding上，但是发现Coding的IP在香港，在我这里访问更慢；另一个设置CDN加速，我尝试了七牛云和腾讯云两个平台，但不知道因为什么，并没有改善很多。</p>
+<p>后来我发现如果部署到码云平台，它的page页面访问速度很快，但是码云的普通用户不能自定义域...</p>
             
             <span class="read-more"><a href="/2020/01/08/%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AAHexo%E5%8D%9A%E5%AE%A2/" title="查看全文" class="posttitle">查看全文</a> <b class="iconfont icon-arrow-right- gradient-text"></b></span>
         </div>
@@ -255,7 +356,12 @@
         <span class="percentage animated fadeIn faster">0%</span>
         <span class="iconfont icon-top02 animated fadeIn faster"></span>
     </div>
-</body>
+<script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(n){n.imageLazyLoadSetting.processImages=i;var e=n.imageLazyLoadSetting.isSPA,r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){e&&(r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")));for(var t,a=0;a<r.length;a++)0<=(t=(t=r[a]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(n.innerHeight||document.documentElement.clientHeight)&&function(){var t,e,n,i,o=r[a];t=o,e=function(){r=r.filter(function(t){return o!==t})},n=new Image,i=t.getAttribute("data-original"),n.onload=function(){t.src=i,e&&e()},n.src=i}()}i(),n.addEventListener("scroll",function(){var t,e;t=i,e=n,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(e)},500)})}(this);</script></body>
 <footer>
     <p class="copyright" id="copyright">
         &copy; 2020 - 2021

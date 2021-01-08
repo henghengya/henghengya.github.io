@@ -102,13 +102,13 @@
                 
                 <span>
                     <b class="iconfont icon-text2"></b> <i>文章字数</i>
-                    23k
+                    12k
                 </span>
                 
                 
                 <span>
                     <b class="iconfont icon-timer__s"></b> <i>阅读约需</i>
-                    21 mins.
+                    11 mins.
                 </span>
                 
                 
@@ -146,36 +146,490 @@
 <p>首先声明，文中的一些名称可能不太标准，大部分是我自己的理解。各位看官多多包涵，如果有一些建议可以提出来，我会酌情更改<br>这个词法分析器默认输入的全是 ASCII 码。<br>具体的代码实现使用的语言是Java</p>
 </blockquote>
 <h2 id="分析词法要求"><a href="#分析词法要求" class="headerlink" title="分析词法要求"></a>分析词法要求</h2><p>这个词法分析器有18个令牌。</p>
-<!--code__2--><pre><code>%u27E8letter%u27E9%20%u2192%20a%20%7C%20b%20%7C%20...%20%7C%20z%20%7C%20A%20%7C%20B%20%7C%20...%20%7C%20Z%0A%u27E8digit%u27E9%20%u2192%200%20%7C%201%20%7C%20...%20%7C%209%0A%u27E8id%u27E9%20%u2192%20%u27E8letter%u27E9%20%7B%u27E8letter%u27E9%20%7C%20%u27E8digit%u27E9%7D%0A%u27E8int%u27E9%20%u2192%20%5B+%7C%u2212%5D%20%7B%u27E8digit%u27E9%7D+%0A%u27E8float%u27E9%20%u2192%20%5B+%7C%u2212%5D%20%28%20%7B%u27E8digit%u27E9%7D+%20%22.%22%20%7B%u27E8digit%u27E9%7D%20%20%7C%20%20%22.%22%20%7B%u27E8digit%u27E9%7D+%20%29%0A%u27E8floatE%u27E9%20%u2192%20%28%u27E8int%u27E9%20%7C%20%u27E8float%u27E9%29%20%28e%7CE%29%20%5B+%7C%u2212%5D%20%7B%u27E8digit%u27E9%7D+%0A%u27E8floatF%u27E9%20%u2192%20%28%u27E8int%u27E9%20%7C%20%u27E8float%u27E9%20%7C%20%u27E8floatE%u27E9%29%20%28%22f%22%20%7C%20%22F%22%29%0A%u27E8add%u27E9%20%u2192%20+%0A%u27E8sub%u27E9%20%u2192%20%u2212%0A%u27E8mul%u27E9%20%u2192%20*%0A%u27E8div%u27E9%20%u2192%20/%0A%u27E8lt%u27E9%20%u2192%20%3C%0A%u27E8le%u27E9%20%u2192%20%22%3C%3D%22%0A%u27E8gt%u27E9%20%u2192%20%3E%0A%u27E8ge%u27E9%20%u2192%20%22%3E%3D%22%0A%u27E8eq%u27E9%20%u2192%20%3D%0A%u27E8LParen%u27E9%20%u2192%20%28%0A%u27E8RParen%u27E9%20%u2192%20%29%0A%u27E8LBrace%u27E9%20%u2192%20%7B%0A%u27E8RBrace%u27E9%20%u2192%20%7D%20
-</code></pre><!--//code__2--><p>对应的 DFA ：</p>
-<p><img src="" data-echo="https://blog-source-1258302212.cos.ap-beijing.myqcloud.com/20200424103922_1bb6e3d62217a04ed6e5293d0111a298.png" alt="20200424103922_1bb6e3d62217a04ed6e5293d0111a298.png"></p>
-<p>另外还有10个关键字：</p>
+<pre><code>⟨letter⟩ → a | b | ... | z | A | B | ... | Z
+⟨digit⟩ → 0 | 1 | ... | 9
+⟨id⟩ → ⟨letter⟩ {⟨letter⟩ | ⟨digit⟩}
+⟨int⟩ → [+|−] {⟨digit⟩}+
+⟨float⟩ → [+|−] ( {⟨digit⟩}+ "." {⟨digit⟩}  |  "." {⟨digit⟩}+ )
+⟨floatE⟩ → (⟨int⟩ | ⟨float⟩) (e|E) [+|−] {⟨digit⟩}+
+⟨floatF⟩ → (⟨int⟩ | ⟨float⟩ | ⟨floatE⟩) ("f" | "F")
+⟨add⟩ → +
+⟨sub⟩ → −
+⟨mul⟩ → *
+⟨div⟩ → /
+⟨lt⟩ → &lt;
+⟨le⟩ → "&lt;="
+⟨gt⟩ → &gt;
+⟨ge⟩ → "&gt;="
+⟨eq⟩ → =
+⟨LParen⟩ → (
+⟨RParen⟩ → )
+⟨LBrace⟩ → {
+⟨RBrace⟩ → } </code></pre><p>另外还有10个关键字：</p>
 <blockquote>
 <p>if, then, else, or, and, not, pair, first, second, nil </p>
 </blockquote>
 <p>我们需要通过程序实现读入一个文件，分析其中对应的词法状态，并将其输出出来。</p>
 <p>示例：</p>
-<!--code__3--><pre><code>%u8F93%u5165%u6587%u672C%uFF1A%0A5%0A+5%0A-5%0A1234%0A+1234%0A-1234%0A%0A+%20-%20*%20/%20%28%20%29%20%7B%20%7D%0A%3C%20%3E%20%3C%3D%20%3E%3D%20%3D%0A%3C%20%3D%20%3E%20%3D%0A%5B%20%5D%0A%7C%7C%20%26%26%20%21%0A%2C%0A%3A%0A%3B%0A%0A%u8F93%u51FA%u7ED3%u679C%uFF1A%0A5%20%20%20%3A%20Int%0A+5%20%20%20%3A%20Int%0A-5%20%20%20%3A%20Int%0A1234%20%20%20%3A%20Int%0A+1234%20%20%20%3A%20Int%0A-1234%20%20%20%3A%20Int%0A+%20%20%20%3A%20Add%0A-%20%20%20%3A%20Sub%0A*%20%20%20%3A%20Mul%0A/%20%20%20%3A%20Div%0A%28%20%20%20%3A%20LParen%0A%29%20%20%20%3A%20RParen%0A%7B%20%20%20%3A%20LBrace%0A%7D%20%20%20%3A%20RBrace%0A%3C%20%20%20%3A%20Lt%0A%3E%20%20%20%3A%20Gt%0A%3C%3D%20%20%20%3A%20Le%0A%3E%3D%20%20%20%3A%20Ge%0A%3D%20%20%20%3A%20Eq%0A%3C%20%20%20%3A%20Lt%0A%3D%20%20%20%3A%20Eq%0A%3E%20%20%20%3A%20Gt%0A%3D%20%20%20%3A%20Eq%0A%5B%20%3A%20Lexical%20Error%2C%20invalid%20token%0A%5D%20%3A%20Lexical%20Error%2C%20invalid%20token%0A%7C%20%3A%20Lexical%20Error%2C%20invalid%20token%0A%7C%20%3A%20Lexical%20Error%2C%20invalid%20token%0A%26%20%3A%20Lexical%20Error%2C%20invalid%20token%0A%26%20%3A%20Lexical%20Error%2C%20invalid%20token%0A%21%20%3A%20Lexical%20Error%2C%20invalid%20token%0A%2C%20%3A%20Lexical%20Error%2C%20invalid%20token%0A%3A%20%3A%20Lexical%20Error%2C%20invalid%20token%0A%3B%20%3A%20Lexical%20Error%2C%20invalid%20token
-</code></pre><!--//code__3--><!--code__4--><pre><code>%u8F93%u5165%u6587%u672C%uFF1A%0Aif%0Athen%0Aelse%0Aor%0Aand%0Anot%0Apair%0Afirst%0Asecond%0Anil%0A%0Ai%0Athe%0Aels%0Ao%0Aan%0Ano%0Apai%0Afirs%0Asecon%0Ani%0A%0Aiff%0Athena%0Aelsep%0Aore%0Aandq%0Anot+%0Apair%3F%0Afirst@%0Asecond+%0Anil-%0A%0AIf%0ATHEN%0AElse%0AoR%0AaNd%0AnoT%0APAIR%0AfirstHand%0AsecondHand%0Anilnull%0A%0Aifthenelse%0Athen316%0Aeelse%0Aorttt%0ACS316and%0Anot%23%0APpair%0Afir%25st%0A%24second%0An%5Bil%0ACS316_CS316project1_and_abvc_or%0A%0A%u8F93%u51FA%u7ED3%u679C%uFF1A%0Aif%20%20%20%3A%20Keyword_if%0Athen%20%20%20%3A%20Keyword_then%0Aelse%20%20%20%3A%20Keyword_else%0Aor%20%20%20%3A%20Keyword_or%0Aand%20%20%20%3A%20Keyword_and%0Anot%20%20%20%3A%20Keyword_not%0Apair%20%20%20%3A%20Keyword_pair%0Afirst%20%20%20%3A%20Keyword_first%0Asecond%20%20%20%3A%20Keyword_second%0Anil%20%20%20%3A%20Keyword_nil%0Ai%20%20%20%3A%20Id%0Athe%20%20%20%3A%20Id%0Aels%20%20%20%3A%20Id%0Ao%20%20%20%3A%20Id%0Aan%20%20%20%3A%20Id%0Ano%20%20%20%3A%20Id%0Apai%20%20%20%3A%20Id%0Afirs%20%20%20%3A%20Id%0Asecon%20%20%20%3A%20Id%0Ani%20%20%20%3A%20Id%0Aiff%20%20%20%3A%20Id%0Athena%20%20%20%3A%20Id%0Aelsep%20%20%20%3A%20Id%0Aore%20%20%20%3A%20Id%0Aandq%20%20%20%3A%20Id%0Anot%20%20%20%3A%20Keyword_not%0A+%20%20%20%3A%20Add%0Apair%20%20%20%3A%20Keyword_pair%0A%3F%20%3A%20Lexical%20Error%2C%20invalid%20token%0Afirst%20%20%20%3A%20Keyword_first%0A@%20%3A%20Lexical%20Error%2C%20invalid%20token%0Asecond%20%20%20%3A%20Keyword_second%0A+%20%20%20%3A%20Add%0Anil%20%20%20%3A%20Keyword_nil%0A-%20%20%20%3A%20Sub%0AIf%20%20%20%3A%20Id%0ATHEN%20%20%20%3A%20Id%0AElse%20%20%20%3A%20Id%0AoR%20%20%20%3A%20Id%0AaNd%20%20%20%3A%20Id%0AnoT%20%20%20%3A%20Id%0APAIR%20%20%20%3A%20Id%0AfirstHand%20%20%20%3A%20Id%0AsecondHand%20%20%20%3A%20Id%0Anilnull%20%20%20%3A%20Id%0Aifthenelse%20%20%20%3A%20Id%0Athen316%20%20%20%3A%20Id%0Aeelse%20%20%20%3A%20Id%0Aorttt%20%20%20%3A%20Id%0ACS316and%20%20%20%3A%20Id%0Anot%20%20%20%3A%20Keyword_not%0A%23%20%3A%20Lexical%20Error%2C%20invalid%20token%0APpair%20%20%20%3A%20Id%0Afir%20%20%20%3A%20Id%0A%25%20%3A%20Lexical%20Error%2C%20invalid%20token%0Ast%20%20%20%3A%20Id%0A%24%20%3A%20Lexical%20Error%2C%20invalid%20token%0Asecond%20%20%20%3A%20Keyword_second%0An%20%20%20%3A%20Id%0A%5B%20%3A%20Lexical%20Error%2C%20invalid%20token%0Ail%20%20%20%3A%20Id%0ACS316%20%20%20%3A%20Id%0A_%20%3A%20Lexical%20Error%2C%20invalid%20token%0ACS316project1%20%20%20%3A%20Id%0A_%20%3A%20Lexical%20Error%2C%20invalid%20token%0Aand%20%20%20%3A%20Keyword_and%0A_%20%3A%20Lexical%20Error%2C%20invalid%20token%0Aabvc%20%20%20%3A%20Id%0A_%20%3A%20Lexical%20Error%2C%20invalid%20token%0Aor%20%20%20%3A%20Keyword_or
-</code></pre><!--//code__4--><h2 id="程序实现"><a href="#程序实现" class="headerlink" title="程序实现"></a>程序实现</h2><h3 id="存储词法结构"><a href="#存储词法结构" class="headerlink" title="存储词法结构"></a>存储词法结构</h3><p>首先使用<code>枚举类</code>记录所有可能的状态，比如18个令牌，和开始、结束、错误状态，以及一些中间状态：Dot、E、EPlusMinus，和10个关键字。  </p>
-<!--code__5--><pre><code class="java">public%20enum%20State%20%7B%0A%20%20%20%20Start%2C%0A%20%20%20%20Error%2C%0A%20%20%20%20End%2C%0A%0A%20%20%20%20Id%2C%0A%20%20%20%20Int%2C%0A%20%20%20%20Float%2C%0A%20%20%20%20FloatE%2C%0A%20%20%20%20FloatF%2C%0A%20%20%20%20Add%2C%0A%20%20%20%20Sub%2C%0A%20%20%20%20Mul%2C%0A%20%20%20%20Div%2C%0A%20%20%20%20Lt%2C%0A%20%20%20%20Le%2C%0A%20%20%20%20Gt%2C%0A%20%20%20%20Ge%2C%0A%20%20%20%20Eq%2C%0A%20%20%20%20LParen%2C%0A%20%20%20%20RParen%2C%0A%20%20%20%20LBrace%2C%0A%20%20%20%20RBrace%2C%0A%0A%20%20%20%20Dot%2C%0A%20%20%20%20E%2C%0A%20%20%20%20EPlusMinus%2C%0A%0A%20%20%20%20Keyword_if%2C%0A%20%20%20%20Keyword_then%2C%0A%20%20%20%20Keyword_else%2C%0A%20%20%20%20Keyword_or%2C%0A%20%20%20%20Keyword_and%2C%0A%20%20%20%20Keyword_not%2C%0A%20%20%20%20Keyword_first%2C%0A%20%20%20%20Keyword_second%2C%0A%20%20%20%20Keyword_nil%2C%0A%20%20%20%20Keyword_pair%3B%0A%7D
-</code></pre>
-<!--//code__5--><p>我觉得词法分析器中最重要的是：如何实现方便保存词法以及对应的状态，并且在使用的时候可以轻松的使用。一开始我用 switch…case 语句，但是这种方法写出来的代码冗长，并且包含了大量的逻辑分析，一旦写错修改起来十分麻烦。后来查询一些资料，改用二维数组存储数据。  </p>
+<pre><code>输入文本：
+5
++5
+-5
+1234
++1234
+-1234
+
++ - * / ( ) { }
+&lt; &gt; &lt;= &gt;= =
+&lt; = &gt; =
+[ ]
+|| &amp;&amp; !
+,
+:
+;
+
+输出结果：
+5   : Int
++5   : Int
+-5   : Int
+1234   : Int
++1234   : Int
+-1234   : Int
++   : Add
+-   : Sub
+*   : Mul
+/   : Div
+(   : LParen
+)   : RParen
+{   : LBrace
+}   : RBrace
+&lt;   : Lt
+&gt;   : Gt
+&lt;=   : Le
+&gt;=   : Ge
+=   : Eq
+&lt;   : Lt
+=   : Eq
+&gt;   : Gt
+=   : Eq
+[ : Lexical Error, invalid token
+] : Lexical Error, invalid token
+| : Lexical Error, invalid token
+| : Lexical Error, invalid token
+&amp; : Lexical Error, invalid token
+&amp; : Lexical Error, invalid token
+! : Lexical Error, invalid token
+, : Lexical Error, invalid token
+: : Lexical Error, invalid token
+; : Lexical Error, invalid token</code></pre><pre><code>输入文本：
+if
+then
+else
+or
+and
+not
+pair
+first
+second
+nil
+
+i
+the
+els
+o
+an
+no
+pai
+firs
+secon
+ni
+
+iff
+thena
+elsep
+ore
+andq
+not+
+pair?
+first@
+second+
+nil-
+
+If
+THEN
+Else
+oR
+aNd
+noT
+PAIR
+firstHand
+secondHand
+nilnull
+
+ifthenelse
+then316
+eelse
+orttt
+CS316and
+not#
+Ppair
+fir%st
+$second
+n[il
+CS316_CS316project1_and_abvc_or
+
+输出结果：
+if   : Keyword_if
+then   : Keyword_then
+else   : Keyword_else
+or   : Keyword_or
+and   : Keyword_and
+not   : Keyword_not
+pair   : Keyword_pair
+first   : Keyword_first
+second   : Keyword_second
+nil   : Keyword_nil
+i   : Id
+the   : Id
+els   : Id
+o   : Id
+an   : Id
+no   : Id
+pai   : Id
+firs   : Id
+secon   : Id
+ni   : Id
+iff   : Id
+thena   : Id
+elsep   : Id
+ore   : Id
+andq   : Id
+not   : Keyword_not
++   : Add
+pair   : Keyword_pair
+? : Lexical Error, invalid token
+first   : Keyword_first
+@ : Lexical Error, invalid token
+second   : Keyword_second
++   : Add
+nil   : Keyword_nil
+-   : Sub
+If   : Id
+THEN   : Id
+Else   : Id
+oR   : Id
+aNd   : Id
+noT   : Id
+PAIR   : Id
+firstHand   : Id
+secondHand   : Id
+nilnull   : Id
+ifthenelse   : Id
+then316   : Id
+eelse   : Id
+orttt   : Id
+CS316and   : Id
+not   : Keyword_not
+# : Lexical Error, invalid token
+Ppair   : Id
+fir   : Id
+% : Lexical Error, invalid token
+st   : Id
+$ : Lexical Error, invalid token
+second   : Keyword_second
+n   : Id
+[ : Lexical Error, invalid token
+il   : Id
+CS316   : Id
+_ : Lexical Error, invalid token
+CS316project1   : Id
+_ : Lexical Error, invalid token
+and   : Keyword_and
+_ : Lexical Error, invalid token
+abvc   : Id
+_ : Lexical Error, invalid token
+or   : Keyword_or</code></pre><h2 id="程序实现"><a href="#程序实现" class="headerlink" title="程序实现"></a>程序实现</h2><h3 id="存储词法结构"><a href="#存储词法结构" class="headerlink" title="存储词法结构"></a>存储词法结构</h3><p>首先使用<code>枚举类</code>记录所有可能的状态，比如18个令牌，和开始、结束、错误状态，以及一些中间状态：Dot、E、EPlusMinus，和10个关键字。  </p>
+<pre><code class="java">public enum State {
+    Start,
+    Error,
+    End,
+
+    Id,
+    Int,
+    Float,
+    FloatE,
+    FloatF,
+    Add,
+    Sub,
+    Mul,
+    Div,
+    Lt,
+    Le,
+    Gt,
+    Ge,
+    Eq,
+    LParen,
+    RParen,
+    LBrace,
+    RBrace,
+
+    Dot,
+    E,
+    EPlusMinus,
+
+    Keyword_if,
+    Keyword_then,
+    Keyword_else,
+    Keyword_or,
+    Keyword_and,
+    Keyword_not,
+    Keyword_first,
+    Keyword_second,
+    Keyword_nil,
+    Keyword_pair;
+}</code></pre>
+<p>我觉得词法分析器中最重要的是：如何实现方便保存词法以及对应的状态，并且可以轻松使用。一开始我用 switch…case 语句，但是这种方法写出来的代码冗长，并且包含了大量的逻辑分析，一旦写错修改起来十分麻烦。后来查询一些资料，改用二维数组存储数据。  </p>
 <p>将二维数组的第一个下标对应每一个状态的位置，第二个下标对应 ASCII 码的128个字符。在Java中枚举类的每一个状态都有对应的位置值。而对应状态的位置值对应的一维数组保存着在此状态下下一个输入字符对应的状态。</p>
 <p>使用了数组存储以后，只需要知道当前状态以及下一个字符，就可以通过下标直接访问对应的下一个状态。</p>
-<!--code__6--><pre><code class="java">public%20static%20void%20initNextState%28%29%20%7B%0A%20%20%20%20for%20%28int%20i%20%3D%200%3B%20i%20%3C%3D%20State.size%3B%20i++%29%20%7B%0A%20%20%20%20%20%20%20%20for%20%28int%20y%20%3D%200%3B%20y%20%3C%20128%3B%20y++%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20nextState%5Bi%5D%5By%5D%20%3D%20State.Error%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%20%20%20%20for%20%28int%20i%20%3D%20%270%27%3B%20i%20%3C%3D%20%279%27%3B%20i++%29%20%7B%0A%20%20%20%20%20%20%20%20nextState%5BState.Start.ordinal%28%29%5D%5Bi%5D%20%3D%20State.Int%3B%0A%20%20%20%20%20%20%20%20nextState%5BState.Id.ordinal%28%29%5D%5Bi%5D%20%3D%20State.Id%3B%0A%20%20%20%20%20%20%20%20nextState%5BState.Int.ordinal%28%29%5D%5Bi%5D%20%3D%20State.Int%3B%0A%20%20%20%20%20%20%20%20nextState%5BState.Add.ordinal%28%29%5D%5Bi%5D%20%3D%20State.Int%3B%0A%20%20%20%20%20%20%20%20nextState%5BState.Sub.ordinal%28%29%5D%5Bi%5D%20%3D%20State.Int%3B%0A%20%20%20%20%20%20%20%20nextState%5BState.Float.ordinal%28%29%5D%5Bi%5D%20%3D%20State.Float%3B%0A%20%20%20%20%20%20%20%20nextState%5BState.Dot.ordinal%28%29%5D%5Bi%5D%20%3D%20State.Float%3B%0A%20%20%20%20%20%20%20%20nextState%5BState.E.ordinal%28%29%5D%5Bi%5D%20%3D%20State.FloatE%3B%0A%20%20%20%20%20%20%20%20nextState%5BState.FloatE.ordinal%28%29%5D%5Bi%5D%20%3D%20State.FloatE%3B%0A%20%20%20%20%20%20%20%20nextState%5BState.EPlusMinus.ordinal%28%29%5D%5Bi%5D%20%3D%20State.FloatE%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20for%20%28int%20i%20%3D%20%27a%27%3B%20i%20%3C%3D%20%27z%27%3B%20i++%29%20%7B%0A%20%20%20%20%20%20%20%20nextState%5BState.Start.ordinal%28%29%5D%5Bi%5D%20%3D%20State.Id%3B%0A%20%20%20%20%20%20%20%20nextState%5BState.Id.ordinal%28%29%5D%5Bi%5D%20%3D%20State.Id%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20for%20%28int%20i%20%3D%20%27A%27%3B%20i%20%3C%3D%20%27Z%27%3B%20i++%29%20%7B%0A%20%20%20%20%20%20%20%20nextState%5BState.Start.ordinal%28%29%5D%5Bi%5D%20%3D%20State.Id%3B%0A%20%20%20%20%20%20%20%20nextState%5BState.Id.ordinal%28%29%5D%5Bi%5D%20%3D%20State.Id%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20nextState%5BState.Start.ordinal%28%29%5D%5B%27*%27%5D%20%3D%20State.Mul%3B%0A%20%20%20%20nextState%5BState.Start.ordinal%28%29%5D%5B%27/%27%5D%20%3D%20State.Div%3B%0A%20%20%20%20nextState%5BState.Start.ordinal%28%29%5D%5B%27%28%27%5D%20%3D%20State.LParen%3B%0A%20%20%20%20nextState%5BState.Start.ordinal%28%29%5D%5B%27%29%27%5D%20%3D%20State.RParen%3B%0A%20%20%20%20nextState%5BState.Start.ordinal%28%29%5D%5B%27%7B%27%5D%20%3D%20State.LBrace%3B%0A%20%20%20%20nextState%5BState.Start.ordinal%28%29%5D%5B%27%7D%27%5D%20%3D%20State.RBrace%3B%0A%20%20%20%20nextState%5BState.Start.ordinal%28%29%5D%5B%27%3C%27%5D%20%3D%20State.Lt%3B%0A%20%20%20%20nextState%5BState.Start.ordinal%28%29%5D%5B%27%3E%27%5D%20%3D%20State.Gt%3B%0A%20%20%20%20nextState%5BState.Start.ordinal%28%29%5D%5B%27%3D%27%5D%20%3D%20State.Eq%3B%0A%20%20%20%20nextState%5BState.Start.ordinal%28%29%5D%5B%27+%27%5D%20%3D%20State.Add%3B%0A%20%20%20%20nextState%5BState.Start.ordinal%28%29%5D%5B%27-%27%5D%20%3D%20State.Sub%3B%0A%20%20%20%20nextState%5BState.Start.ordinal%28%29%5D%5B%27.%27%5D%20%3D%20State.Dot%3B%0A%0A%20%20%20%20nextState%5BState.Lt.ordinal%28%29%5D%5B%27%3D%27%5D%20%3D%20State.Le%3B%0A%20%20%20%20nextState%5BState.Gt.ordinal%28%29%5D%5B%27%3D%27%5D%20%3D%20State.Ge%3B%0A%0A%20%20%20%20nextState%5BState.Int.ordinal%28%29%5D%5B%27f%27%5D%20%3D%20State.FloatF%3B%0A%20%20%20%20nextState%5BState.Int.ordinal%28%29%5D%5B%27F%27%5D%20%3D%20State.FloatF%3B%0A%20%20%20%20nextState%5BState.Float.ordinal%28%29%5D%5B%27f%27%5D%20%3D%20State.FloatF%3B%0A%20%20%20%20nextState%5BState.Float.ordinal%28%29%5D%5B%27F%27%5D%20%3D%20State.FloatF%3B%0A%20%20%20%20nextState%5BState.FloatE.ordinal%28%29%5D%5B%27f%27%5D%20%3D%20State.FloatF%3B%0A%20%20%20%20nextState%5BState.FloatE.ordinal%28%29%5D%5B%27F%27%5D%20%3D%20State.FloatF%3B%0A%0A%20%20%20%20nextState%5BState.Int.ordinal%28%29%5D%5B%27e%27%5D%20%3D%20State.E%3B%0A%20%20%20%20nextState%5BState.Int.ordinal%28%29%5D%5B%27E%27%5D%20%3D%20State.E%3B%0A%20%20%20%20nextState%5BState.Float.ordinal%28%29%5D%5B%27e%27%5D%20%3D%20State.E%3B%0A%20%20%20%20nextState%5BState.Float.ordinal%28%29%5D%5B%27E%27%5D%20%3D%20State.E%3B%0A%0A%20%20%20%20nextState%5BState.Add.ordinal%28%29%5D%5B%27.%27%5D%20%3D%20State.Dot%3B%0A%20%20%20%20nextState%5BState.Sub.ordinal%28%29%5D%5B%27.%27%5D%20%3D%20State.Dot%3B%0A%20%20%20%20nextState%5BState.Int.ordinal%28%29%5D%5B%27.%27%5D%20%3D%20State.Float%3B%0A%0A%20%20%20%20nextState%5BState.E.ordinal%28%29%5D%5B%27+%27%5D%20%3D%20State.EPlusMinus%3B%0A%20%20%20%20nextState%5BState.E.ordinal%28%29%5D%5B%27-%27%5D%20%3D%20State.EPlusMinus%3B%0A%0A%7D
-</code></pre>
-<!--//code__6--><p>然后使用一个 map 保存关键字：</p>
-<!--code__7--><pre><code class="java">public%20static%20void%20initKeywordMap%28%29%20%7B%0A%20%20%20%20keywordMap.put%28%22if%22%2C%20State.Keyword_if%29%3B%0A%20%20%20%20keywordMap.put%28%22then%22%2C%20State.Keyword_then%29%3B%0A%20%20%20%20keywordMap.put%28%22else%22%2C%20State.Keyword_else%29%3B%0A%20%20%20%20keywordMap.put%28%22or%22%2C%20State.Keyword_or%29%3B%0A%20%20%20%20keywordMap.put%28%22and%22%2C%20State.Keyword_and%29%3B%0A%20%20%20%20keywordMap.put%28%22not%22%2C%20State.Keyword_not%29%3B%0A%20%20%20%20keywordMap.put%28%22pair%22%2C%20State.Keyword_pair%29%3B%0A%20%20%20%20keywordMap.put%28%22first%22%2C%20State.Keyword_first%29%3B%0A%20%20%20%20keywordMap.put%28%22second%22%2C%20State.Keyword_second%29%3B%0A%20%20%20%20keywordMap.put%28%22nil%22%2C%20State.Keyword_nil%29%3B%0A%7D
-</code></pre>
-<!--//code__7--><h3 id="核心驱动器实现"><a href="#核心驱动器实现" class="headerlink" title="核心驱动器实现"></a>核心驱动器实现</h3><p>保存好所需要的数据以后，就开始实现将输入的字符分析对应每一个状态。</p>
-<p>首先我们先创建一个IO工具类，以便于方便的实现输入输出，以及对输入输出位置的设置。</p>
-<!--code__8--><pre><code class="java">public%20class%20IO%20%7B%0A%20%20%20%20private%20static%20BufferedReader%20reader%20%3D%20null%3B%0A%20%20%20%20private%20static%20BufferedWriter%20writer%20%3D%20null%3B%0A%0A%20%20%20%20//%u7528%u4E8E%u5B58%u50A8%u8BFB%u53D6%u5230%u7684%u6240%u6709%u6587%u5B57%0A%20%20%20%20private%20static%20StringBuilder%20text%20%3D%20new%20StringBuilder%28%29%3B%0A%20%20%20%20//%u8BB0%u5F55%u5F53%u524D%u8BFB%u53D6%u5230%u7684%u4F4D%u7F6E%0A%20%20%20%20private%20static%20int%20flag%20%3D%200%3B%0A%0A%20%20%20%20public%20static%20void%20setIO%28String%5B%5D%20values%29%20%7B%0A%20%20%20%20%20%20%20%20if%20%28values.length%20%21%3D%200%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20String%20inPath%20%3D%20values%5B0%5D%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20String%20outPath%20%3D%20values%5B1%5D%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20try%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20reader%20%3D%20new%20BufferedReader%28new%20FileReader%28inPath%29%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20writer%20%3D%20new%20BufferedWriter%28new%20FileWriter%28outPath%29%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%20catch%20%28IOException%20e%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20e.printStackTrace%28%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20reader%20%3D%20new%20BufferedReader%28new%20InputStreamReader%28System.in%29%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20writer%20%3D%20new%20BufferedWriter%28new%20OutputStreamWriter%28System.out%29%29%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20%u83B7%u53D6%u4E0B%u4E00%u4E2A%u5B57%u7B26%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20@return%20%u8FD4%u56DE%u4E0B%u4E00%u4E2A%u5B57%u7B26%uFF0C%u5982%u679C%u5230%u8FBE%u7ED3%u5C3E%u8FD4%u56DE-1%0A%20%20%20%20%20*/%0A%20%20%20%20public%20static%20int%20getNextChar%28%29%20%7B%0A%20%20%20%20%20%20%20%20try%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20//%u5F53flag%u5904%u4E8Etext%u6700%u540E%u4E00%u4F4D%u65F6%uFF0Cflag%u4E3Atext.length-1%uFF0C%u6B64%u65F6%u81EA%u589E1%uFF0Cflag%3D%3Dtext.length%u8BF4%u660E%u4E0A%u4E00%u6B21%u8BFB%u53D6%u5904%u4E8E%u7ED3%u5C3E%0A%20%20%20%20%20%20%20%20%20%20%20%20//%u5982%u679C%u6807%u5FD7%u4F4D%u4E3A%0A%20%20%20%20%20%20%20%20%20%20%20%20if%20%28flag%20%3D%3D%20text.length%28%29%29%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20char%5B%5D%20temp%20%3D%20new%20char%5B10%5D%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20int%20length%20%3D%20reader.read%28temp%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if%20%28length%20%3D%3D%20-1%29%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20-1%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20text.append%28new%20String%28temp%2C%200%2C%20length%29%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20text.charAt%28flag++%29%3B%0A%20%20%20%20%20%20%20%20%7D%20catch%20%28IOException%20e%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20e.printStackTrace%28%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20-1%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20%u5C06%u6307%u9488flag%u4F4D%u7F6E%u524D%u79FB%u4E00%u4F4D%0A%20%20%20%20%20*/%0A%20%20%20%20public%20static%20void%20forward%28%29%20%7B%0A%20%20%20%20%20%20%20%20if%20%28flag%20%3E%3D%200%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20flag--%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%0A%20%20%20%20public%20static%20boolean%20hasNext%28%29%7B%0A%20%20%20%20%20%20%20%20try%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20if%20%28flag%20%3C%20text.length%28%29%29%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20true%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7Delse%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20char%5B%5D%20temp%20%3D%20new%20char%5B10%5D%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20int%20length%20%3D%20reader.read%28temp%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if%20%28length%20%3D%3D%20-1%29%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20false%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20text.append%28new%20String%28temp%2C%200%2C%20length%29%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20return%20true%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%20catch%20%28IOException%20e%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20e.printStackTrace%28%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20return%20false%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20%u5411%u8F93%u51FA%u6D41%u4E2D%u5199%u5165%u5B57%u7B26%u4E32%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20@param%20value%20%u9700%u8981%u5199%u5165%u7684%u5B57%u7B26%u4E32%0A%20%20%20%20%20*/%0A%20%20%20%20public%20static%20void%20print%28String%20value%29%20%7B%0A%20%20%20%20%20%20%20%20try%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20writer.write%28value%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20writer.flush%28%29%3B%0A%20%20%20%20%20%20%20%20%7D%20catch%20%28IOException%20e%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20e.printStackTrace%28%29%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%0A%20%20%20%20/**%0A%20%20%20%20%20*%20%u5411%u8F93%u51FA%u6D41%u4E2D%u5199%u5165%u5B57%u7B26%u4E32%u5E76%u6362%u884C%0A%20%20%20%20%20*%0A%20%20%20%20%20*%20@param%20value%20%u9700%u8981%u5199%u5165%u7684%u5B57%u7B26%u4E32%0A%20%20%20%20%20*/%0A%20%20%20%20public%20static%20void%20println%28String%20value%29%20%7B%0A%20%20%20%20%20%20%20%20print%28value%20+%20%27%5Cn%27%29%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20public%20static%20void%20close%28%29%20%7B%0A%20%20%20%20%20%20%20%20try%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20reader.close%28%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20writer.close%28%29%3B%0A%20%20%20%20%20%20%20%20%7D%20catch%20%28IOException%20e%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20e.printStackTrace%28%29%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%7D
-</code></pre>
-<!--//code__8--><p>接下来可以实现读取并分析输入文本中的词法分析</p>
-<!--code__9--><pre><code class="java">/**%0A%20%20%20%20*%20%u5F53%u524D%u7684%u72B6%u6001%0A%20%20%20%20*/%0Apublic%20static%20State%20state%20%3D%20State.Start%3B%0A%0Apublic%20static%20void%20getState%28%29%7B%0A%20%20%20%20state%20%3D%20State.Start%3B%0A%20%20%20%20sb.delete%280%2Csb.length%28%29%29%3B%0A%20%20%20%20int%20value%20%3D%200%3B%0A%20%20%20%20if%20%28%21IO.hasNext%28%29%29%7B%0A%20%20%20%20%20%20%20%20state%20%3D%20State.End%3B%0A%20%20%20%20%20%20%20%20return%3B%0A%20%20%20%20%7D%0A%20%20%20%20while%20%28%28value%20%3D%20IO.getNextChar%28%29%29%20%21%3D%20-1%29%7B%0A%20%20%20%20%20%20%20%20char%20charTemp%20%3D%20%28char%29value%3B%0A%20%20%20%20%20%20%20%20if%20%28charTemp%20%3E%20127%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20state%20%3D%20State.Error%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20return%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20State%20stateTemp%20%3D%20nextState%5Bstate.ordinal%28%29%5D%5BcharTemp%5D%3B%0A%20%20%20%20%20%20%20%20//%u83B7%u53D6%u4E0B%u4E00%u4E2A%u72B6%u6001%uFF0C%u5982%u679C%u662F%u9519%u8BEF%uFF0C%u5219%u5224%u65AD%u4E0A%u4E00%u4E2A%u72B6%u6001%u662F%u5426%u5DF2%u7ECF%u53EF%u4EE5%u7ED3%u675F%uFF0C%u53EF%u4EE5%u5219%u8F93%u51FA%u5F53%u524D%u7684%u72B6%u6001%0A%20%20%20%20%20%20%20%20if%20%28stateTemp%20%3D%3D%20State.Error%20%7C%7CCharacter.isWhitespace%28charTemp%29%29%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20if%20%28state.isEnd%28%29%29%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if%20%28state%20%3D%3D%20State.Id%29%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20state%20%3D%20keywordCheck%28state%2Csb.toString%28%29%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if%20%28sb.length%28%29%20%3E%200%20%26%26%20%21Character.isWhitespace%28charTemp%29%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20//%u5982%u679C%u72B6%u6001%u5DF2%u7ECF%u7ED3%u675F%uFF0C%u5219%u5C06%u6807%u5FD7%u4F4D%u524D%u79FB%u4E00%u4F4D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20IO.forward%28%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20break%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7Delse%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if%20%28state%20%3D%3D%20State.Start%20%26%26%20Character.isWhitespace%28charTemp%29%29%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20continue%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7Delse%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20state%20%3D%20State.Error%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20if%20%28%21Character.isWhitespace%28charTemp%29%29%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20sb.append%28charTemp%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20break%3B%0A%20%20%20%20%20%20%20%20%7Delse%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20state%20%3D%20stateTemp%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20sb.append%28charTemp%29%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%7D
-</code></pre>
-<!--//code__9-->
+<pre><code class="java">public static void initNextState() {
+    for (int i = 0; i &lt;= State.size; i++) {
+        for (int y = 0; y &lt; 128; y++) {
+            nextState[i][y] = State.Error;
+        }
+    }
+    for (int i = '0'; i &lt;= '9'; i++) {
+        nextState[State.Start.ordinal()][i] = State.Int;
+        nextState[State.Id.ordinal()][i] = State.Id;
+        nextState[State.Int.ordinal()][i] = State.Int;
+        nextState[State.Add.ordinal()][i] = State.Int;
+        nextState[State.Sub.ordinal()][i] = State.Int;
+        nextState[State.Float.ordinal()][i] = State.Float;
+        nextState[State.Dot.ordinal()][i] = State.Float;
+        nextState[State.E.ordinal()][i] = State.FloatE;
+        nextState[State.FloatE.ordinal()][i] = State.FloatE;
+        nextState[State.EPlusMinus.ordinal()][i] = State.FloatE;
+    }
+
+    for (int i = 'a'; i &lt;= 'z'; i++) {
+        nextState[State.Start.ordinal()][i] = State.Id;
+        nextState[State.Id.ordinal()][i] = State.Id;
+    }
+
+    for (int i = 'A'; i &lt;= 'Z'; i++) {
+        nextState[State.Start.ordinal()][i] = State.Id;
+        nextState[State.Id.ordinal()][i] = State.Id;
+    }
+
+    nextState[State.Start.ordinal()]['*'] = State.Mul;
+    nextState[State.Start.ordinal()]['/'] = State.Div;
+    nextState[State.Start.ordinal()]['('] = State.LParen;
+    nextState[State.Start.ordinal()][')'] = State.RParen;
+    nextState[State.Start.ordinal()]['{'] = State.LBrace;
+    nextState[State.Start.ordinal()]['}'] = State.RBrace;
+    nextState[State.Start.ordinal()]['&lt;'] = State.Lt;
+    nextState[State.Start.ordinal()]['&gt;'] = State.Gt;
+    nextState[State.Start.ordinal()]['='] = State.Eq;
+    nextState[State.Start.ordinal()]['+'] = State.Add;
+    nextState[State.Start.ordinal()]['-'] = State.Sub;
+    nextState[State.Start.ordinal()]['.'] = State.Dot;
+
+    nextState[State.Lt.ordinal()]['='] = State.Le;
+    nextState[State.Gt.ordinal()]['='] = State.Ge;
+
+    nextState[State.Int.ordinal()]['f'] = State.FloatF;
+    nextState[State.Int.ordinal()]['F'] = State.FloatF;
+    nextState[State.Float.ordinal()]['f'] = State.FloatF;
+    nextState[State.Float.ordinal()]['F'] = State.FloatF;
+    nextState[State.FloatE.ordinal()]['f'] = State.FloatF;
+    nextState[State.FloatE.ordinal()]['F'] = State.FloatF;
+
+    nextState[State.Int.ordinal()]['e'] = State.E;
+    nextState[State.Int.ordinal()]['E'] = State.E;
+    nextState[State.Float.ordinal()]['e'] = State.E;
+    nextState[State.Float.ordinal()]['E'] = State.E;
+
+    nextState[State.Add.ordinal()]['.'] = State.Dot;
+    nextState[State.Sub.ordinal()]['.'] = State.Dot;
+    nextState[State.Int.ordinal()]['.'] = State.Float;
+
+    nextState[State.E.ordinal()]['+'] = State.EPlusMinus;
+    nextState[State.E.ordinal()]['-'] = State.EPlusMinus;
+
+}</code></pre>
+<p>然后使用一个 map 保存关键字：</p>
+<pre><code class="java">public static void initKeywordMap() {
+    keywordMap.put("if", State.Keyword_if);
+    keywordMap.put("then", State.Keyword_then);
+    keywordMap.put("else", State.Keyword_else);
+    keywordMap.put("or", State.Keyword_or);
+    keywordMap.put("and", State.Keyword_and);
+    keywordMap.put("not", State.Keyword_not);
+    keywordMap.put("pair", State.Keyword_pair);
+    keywordMap.put("first", State.Keyword_first);
+    keywordMap.put("second", State.Keyword_second);
+    keywordMap.put("nil", State.Keyword_nil);
+}</code></pre>
+<h3 id="核心驱动器实现"><a href="#核心驱动器实现" class="headerlink" title="核心驱动器实现"></a>核心驱动器实现</h3><p>保存好所需要的数据以后，就开始实现将输入的字符分析对应每一个状态。</p>
+<p>首先我们先创建一个IO工具类，以便于方便实现输入输出，以及对输入输出位置的设置。</p>
+<pre><code class="java">public class IO {
+    private static BufferedReader reader = null;
+    private static BufferedWriter writer = null;
+
+    //用于存储读取到的所有文字
+    private static StringBuilder text = new StringBuilder();
+    //记录当前读取到的位置
+    private static int flag = 0;
+
+    public static void setIO(String[] values) {
+        if (values.length != 0) {
+            String inPath = values[0];
+            String outPath = values[1];
+            try {
+                reader = new BufferedReader(new FileReader(inPath));
+                writer = new BufferedWriter(new FileWriter(outPath));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            reader = new BufferedReader(new InputStreamReader(System.in));
+            writer = new BufferedWriter(new OutputStreamWriter(System.out));
+        }
+    }
+
+
+    /**
+     * 获取下一个字符
+     *
+     * @return 返回下一个字符，如果到达结尾返回-1
+     */
+    public static int getNextChar() {
+        try {
+            //当flag处于text最后一位时，flag为text.length-1，此时自增1，flag==text.length说明上一次读取处于结尾
+            //如果标志位为
+            if (flag == text.length()){
+                char[] temp = new char[10];
+                int length = reader.read(temp);
+                if (length == -1){
+                    return -1;
+                }
+                text.append(new String(temp, 0, length));
+            }
+            return text.charAt(flag++);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    /**
+     * 将指针flag位置前移一位
+     */
+    public static void forward() {
+        if (flag &gt;= 0) {
+            flag--;
+        }
+    }
+
+    public static boolean hasNext(){
+        try {
+            if (flag &lt; text.length()){
+                return true;
+            }else {
+                char[] temp = new char[10];
+                int length = reader.read(temp);
+                if (length == -1){
+                    return false;
+                }
+                text.append(new String(temp, 0, length));
+                return true;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * 向输出流中写入字符串
+     *
+     * @param value 需要写入的字符串
+     */
+    public static void print(String value) {
+        try {
+            writer.write(value);
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 向输出流中写入字符串并换行
+     *
+     * @param value 需要写入的字符串
+     */
+    public static void println(String value) {
+        print(value + '\n');
+    }
+
+    public static void close() {
+        try {
+            reader.close();
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+<p>接下来可以实现读取并分析输入文本中的词法分析</p>
+<pre><code class="java">/**
+ * 当前的状态
+ */
+public static State state = State.Start;
+
+public static void getState(){
+    state = State.Start;
+    sb.delete(0,sb.length());
+    int value = 0;
+    if (!IO.hasNext()){
+        state = State.End;
+        return;
+    }
+    while ((value = IO.getNextChar()) != -1){
+        char charTemp = (char)value;
+        if (charTemp &gt; 127) {
+            state = State.Error;
+            return;
+        }
+        State stateTemp = nextState[state.ordinal()][charTemp];
+        //获取下一个状态，如果是错误，则判断上一个状态是否已经可以结束，可以则输出当前的状态
+        if (stateTemp == State.Error ||Character.isWhitespace(charTemp)){
+            if (state.isEnd()){
+                if (state == State.Id){
+                    state = keywordCheck(state,sb.toString());
+                }
+                if (sb.length() &gt; 0 &amp;&amp; !Character.isWhitespace(charTemp)) {
+                    //如果状态已经结束，则将标志位前移一位
+                    IO.forward();
+                }
+                break;
+            }else {
+                if (state == State.Start &amp;&amp; Character.isWhitespace(charTemp)){
+                    continue;
+                }else {
+                    state = State.Error;
+                    if (!Character.isWhitespace(charTemp))
+                        sb.append(charTemp);
+                }
+            }
+            break;
+        }else {
+            state = stateTemp;
+            sb.append(charTemp);
+        }
+    }
+}</code></pre>
+
             <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
             <audio id="audio" loop="1" preload="auto" controls="controls"
                 data-autoplay="true">
@@ -243,8 +697,8 @@
                 </div>
                 <ul>
                     <li><a href="/">4 <p>文章</p></a></li>
-                    <li><a href="/categories">3 <p>分类</p></a></li>
-                    <li><a href="/tags">4 <p>标签</p></a></li>
+                    <li><a href="/categories">4 <p>分类</p></a></li>
+                    <li><a href="/tags">7 <p>标签</p></a></li>
                 </ul>
             </div>
             
@@ -269,7 +723,12 @@
         <span class="percentage animated fadeIn faster">0%</span>
         <span class="iconfont icon-top02 animated fadeIn faster"></span>
     </div>
-</body>
+<script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(n){n.imageLazyLoadSetting.processImages=i;var e=n.imageLazyLoadSetting.isSPA,r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){e&&(r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")));for(var t,a=0;a<r.length;a++)0<=(t=(t=r[a]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(n.innerHeight||document.documentElement.clientHeight)&&function(){var t,e,n,i,o=r[a];t=o,e=function(){r=r.filter(function(t){return o!==t})},n=new Image,i=t.getAttribute("data-original"),n.onload=function(){t.src=i,e&&e()},n.src=i}()}i(),n.addEventListener("scroll",function(){var t,e;t=i,e=n,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(e)},500)})}(this);</script></body>
 <footer>
     <p class="copyright" id="copyright">
         &copy; 2020 - 2021
