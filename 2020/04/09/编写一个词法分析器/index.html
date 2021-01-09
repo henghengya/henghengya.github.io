@@ -349,7 +349,7 @@ _ : Lexical Error, invalid token
 abvc   : Id
 _ : Lexical Error, invalid token
 or   : Keyword_or</code></pre>
-<h2 id="程序实现"><a href="#程序实现" class="headerlink" title="程序实现"></a>程序实现</h2><h3 id="存储词法结构"><a href="#存储词法结构" class="headerlink" title="存储词法结构"></a>存储词法结构</h3><p>首先使用<code>枚举类</code>记录所有可能的状态，比如18个令牌，和开始、结束、错误状态，以及一些中间状态：Dot、E、EPlusMinus，和10个关键字。  </p>
+<h2 id="程序实现"><a href="#程序实现" class="headerlink" title="程序实现"></a>程序实现</h2><h3 id="存储词法结构"><a href="#存储词法结构" class="headerlink" title="存储词法结构"></a>存储词法结构</h3><p>首先使用<code>枚举类</code>记录所有可能的状态，比如18个令牌，和开始、结束、错误状态，以及一些中间状态：Dot、E、EPlusMinus，和10个关键字。</p>
 <pre><code class="java">public enum State {
     Start,
     Error,
@@ -387,7 +387,7 @@ or   : Keyword_or</code></pre>
     Keyword_first,
     Keyword_second,
     Keyword_nil,
-    Keyword_pair;
+    Keyword_pair
 }</code></pre>
 <p>我觉得词法分析器中最重要的是：如何实现方便保存词法以及对应的状态，并且可以轻松使用。一开始我用 switch…case 语句，但是这种方法写出来的代码冗长，并且包含了大量的逻辑分析，一旦写错修改起来十分麻烦。后来查询一些资料，改用二维数组存储数据。  </p>
 <p>将二维数组的第一个下标对应每一个状态的位置，第二个下标对应 ASCII 码的128个字符。在Java中枚举类的每一个状态都有对应的位置值。而对应状态的位置值对应的一维数组保存着在此状态下下一个输入字符对应的状态。</p>
@@ -477,7 +477,7 @@ or   : Keyword_or</code></pre>
     private static BufferedWriter writer = null;
 
     //用于存储读取到的所有文字
-    private static StringBuilder text = new StringBuilder();
+    private static final StringBuilder text = new StringBuilder();
     //记录当前读取到的位置
     private static int flag = 0;
 
@@ -507,10 +507,10 @@ or   : Keyword_or</code></pre>
         try {
             //当flag处于text最后一位时，flag为text.length-1，此时自增1，flag==text.length说明上一次读取处于结尾
             //如果标志位为
-            if (flag == text.length()){
+            if (flag == text.length()) {
                 char[] temp = new char[10];
                 int length = reader.read(temp);
-                if (length == -1){
+                if (length == -1) {
                     return -1;
                 }
                 text.append(new String(temp, 0, length));
@@ -531,19 +531,17 @@ or   : Keyword_or</code></pre>
         }
     }
 
-    public static boolean hasNext(){
+    public static boolean hasNext() {
         try {
-            if (flag &lt; text.length()){
-                return true;
-            }else {
+            if (flag &gt;= text.length()) {
                 char[] temp = new char[10];
                 int length = reader.read(temp);
-                if (length == -1){
+                if (length == -1) {
                     return false;
                 }
                 text.append(new String(temp, 0, length));
-                return true;
             }
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -583,7 +581,7 @@ or   : Keyword_or</code></pre>
     }
 }</code></pre>
 <p>接下来可以实现读取并分析输入文本中的词法分析</p>
-<pre><code class="java">/**
+<pre><code class="java">/*
  * 当前的状态
  */
 public static State state = State.Start;
@@ -947,6 +945,6 @@ public static void getState(){
 
 
 
- <script> (function () { var bp = document.createElement('script'); var curProtocol = window.location.protocol.split(':')[0]; if (curProtocol === 'https') { bp.src = 'https://zz.bdstatic.com/linksubmit/push.js'; } else { bp.src = 'http://push.zhanzhang.baidu.com/push.js'; } var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(bp, s); })(); </script> 
+
 
 </html>
